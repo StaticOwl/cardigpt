@@ -1,15 +1,18 @@
-# general_template
+# Potluck Research
 
-This is a general template for any repo in this project.
+Putting up all the dump of code and materials here.
 
 # Description
 
-Here goes the description
+No dragon's harmed.
 
 # Credits
 
 [@StaticOwl](https://www.github.com/StaticOwl)
 
+# Details
+[Literature Review](papers/papers.md)
+
 # Current Status
 
-Here goes the the current status
+WIP
