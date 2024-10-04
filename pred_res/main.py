@@ -36,7 +36,11 @@ def kaggle_data_downloader(flag = False):
             json.dump(datadict, f)
 
 if __name__ == '__main__':
-    kaggle_data_downloader(True)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--download', action='store_true')
+    args = parser.parse_args()
+    kaggle_data_downloader(args.flag)
 
 # def load_data(filename):
 #     """
