@@ -19,7 +19,7 @@ def Resample(input_signal, src_fs, tar_fs):
         audio_len = input_signal.shape[1]
         audio_time_max = 1.0 * (audio_len) / src_fs
         src_time = 1.0 * np.linspace(0, audio_len, audio_len) / src_fs
-        tar_time = 1.0 * np.linspace(0, np.int(audio_time_max * tar_fs), np.int(audio_time_max * tar_fs)) / tar_fs
+        tar_time = 1.0 * np.linspace(0, int(audio_time_max * tar_fs), np.int(audio_time_max * tar_fs)) / tar_fs
         for i in range(input_signal.shape[0]):
             if i == 0:
                 output_signal = np.interp(tar_time, src_time, input_signal[i, :]).astype(dtype)
