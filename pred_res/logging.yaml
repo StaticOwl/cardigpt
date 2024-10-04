@@ -1,0 +1,26 @@
+# logging.yaml
+
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  standard:
+    format: '%(asctime)s - %(levelname)s - %(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: standard
+    stream: ext://sys.stdout
+
+  file_handler:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: standard
+    filename: 'project.log'
+    mode: 'w'
+
+root:
+  level: DEBUG
+  handlers: [console, file_handler]

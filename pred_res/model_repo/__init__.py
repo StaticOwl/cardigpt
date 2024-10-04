@@ -1,0 +1,1 @@
+from model_repo.resnet import resnet18 as resnet
