@@ -40,7 +40,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--download', action='store_true')
     args = parser.parse_args()
-    kaggle_data_downloader(args.flag)
+    kaggle_data_downloader(args.download)
 
 # def load_data(filename):
 #     """
