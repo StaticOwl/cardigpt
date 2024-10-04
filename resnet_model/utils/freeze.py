@@ -1,5 +1,8 @@
 
-from collections import Iterable
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 
 def set_freeze_by_id(model, layer_num_last):
     for param in model.parameters():
