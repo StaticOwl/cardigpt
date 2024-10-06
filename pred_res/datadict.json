@@ -1,32 +1,26 @@
 {
-    "china-12lead-ecg": {
-        "source": "bjoernjostein/china-12lead-ecg-challenge-database",
-        "inside_folder": "Training_2",
-        "path": "input_data/china-12lead-ecg"
-    },
-    "cpsc2018": {
-        "source": "bjoernjostein/china-physiological-signal-challenge-in-2018",
-        "inside_folder": "Training_WFDB",
-        "path": "input_data/cpsc2018"
-    },
-    "georgia-12lead": {
-        "source": "bjoernjostein/georgia-12lead-ecg-challenge-database",
-        "inside_folder": "Georgia",
-        "path": "input_data/georgia-12lead"
-    },
-    "ptb-diagnostic": {
-        "source": "bjoernjostein/ptb-diagnostic-ecg-database",
-        "inside_folder": "Training_PTB",
-        "path": "input_data/ptb-diagnostic"
-    },
-    "ptbxl": {
-        "source": "bjoernjostein/ptbxl-electrocardiography-database",
-        "inside_folder": "WFDB",
-        "path": "input_data/ptbxl"
-    },
-    "st-petersburg": {
-        "source": "bjoernjostein/st-petersburg-incart-12lead-arrhythmia-database",
-        "inside_folder": "Training_StPetersburg",
-        "path": "input_data/st-petersburg"
-    }
+  "china-12lead-ecg": {
+    "source": "bjoernjostein/china-12lead-ecg-challenge-database",
+    "inside_folder": "Training_2"
+  },
+  "cpsc2018": {
+    "source": "bjoernjostein/china-physiological-signal-challenge-in-2018",
+    "inside_folder": "Training_WFDB"
+  },
+  "georgia-12lead": {
+    "source": "bjoernjostein/georgia-12lead-ecg-challenge-database",
+    "inside_folder": "Georgia"
+  },
+  "ptb-diagnostic": {
+    "source": "bjoernjostein/ptb-diagnostic-ecg-database",
+    "inside_folder": "Training_PTB"
+  },
+  "ptbxl": {
+    "source": "bjoernjostein/ptbxl-electrocardiography-database",
+    "inside_folder": "WFDB"
+  },
+  "st-petersburg": {
+    "source": "bjoernjostein/st-petersburg-incart-12lead-arrhythmia-database",
+    "inside_folder": "Training_StPetersburg"
+  }
 }

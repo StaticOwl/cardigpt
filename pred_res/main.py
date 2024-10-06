@@ -7,24 +7,50 @@ Description: Main Driver Code
 
 import os, json, argparse
 from logging_config import setup_logging
-from utils import kaggle_data_downloader, load_and_process_data
 
 import logging
+
+from pred_res.train.train import Trainer
+from pred_res.utils.datasplit import read_and_split_data
+from pred_res.utils.downloader import kaggle_data_downloader
 
 logger = logging.getLogger(__name__)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--download', action='store_true')
+    parser.add_argument('--save_dir', type=str, default='./trained_model', help='the directory to save latest trained model')
+    parser.add_argument('--split', type=str, default='0', help='The number of split')
+    parser.add_argument('--data_dir', type=str, default='./data', help='the directory of the data')
+    parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
+    parser.add_argument('--num_workers', type=int, default=0, help='the number of training process')
+    parser.add_argument('--layer_num_last', type=int, default=0, help='the number of last layers which unfreeze')
+    parser.add_argument('--lr', type=float, default=0.0003, help='the initial learning rate')
+    parser.add_argument('--weight_decay', type=float, default=1e-5, help='the weight decay')
+    parser.add_argument('--step_size', type=str, default='3', help='stepLR step decay')
+    parser.add_argument('--gamma', type=float, default=0.1, help='learning rate scheduler parameter for step and exp')
+    parser.add_argument('--max_epoch', type=int, default=5, help='max number of epoch')
+    parser.add_argument('--win_length', type=int, default=4096, help='window length')
+    parser.add_argument('--overlap', type=int, default=256, help='overlap')
+    parser.add_argument('--log_step', type=int, default=10, help='step after log prints during training')
+
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
     setup_logging()
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--download', action='store_true', default=False)
-    args = parser.parse_args()
+    args = parse_args()
     with open(os.path.join(os.path.dirname(__file__), 'datadict.json')) as f:
         datadict = json.load(f)
     kaggle_data_downloader(datadict, args.download)
+    read_and_split_data('./input_data/train/')
 
-    gender, age, labels, ecg_filenames = load_and_process_data(datadict)
+    for k, v in args.__dict__.items():
+        logging.info("{}: {}".format(k, v))
 
-    for item in [gender, age, labels, ecg_filenames]:
-        print(item)
-        input("Press any keystroke...")
+    trainer = Trainer(args)
+    trainer.setup()
+    trainer.train()
+
+
