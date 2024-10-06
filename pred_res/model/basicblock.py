@@ -7,8 +7,8 @@ Description: Basic building block for ResNet models.
 """
 from torch import nn
 
-from selayer import SELayer
-from util import conv7x1
+from .selayer import SELayer
+from .util import conv7x1
 
 
 class BasicBlock(nn.Module):

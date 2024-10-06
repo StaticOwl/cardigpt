@@ -6,8 +6,8 @@ Created: 06-10-2024
 Description: write_a_description
 """
 
-from ECGData import ECGData
-from Transformers import Compose, RandomClip, Normalize, Retype, ValClip
+from .ECGData import ECGData
+from .Transformers import Compose, RandomClip, Normalize, Retype, ValClip
 import pandas as pd
 
 nomalisetype = 'none'
