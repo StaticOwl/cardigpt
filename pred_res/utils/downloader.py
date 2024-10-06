@@ -37,7 +37,6 @@ def kaggle_data_downloader(datadict, flag=False):
 
         # Download and process each dataset
         for key, value in tqdm(datadict.items(), desc='Downloading data'):
-            print(key, value)
             dataset_path = 'input_data'
 
             if key not in os.listdir(dataset_path):
