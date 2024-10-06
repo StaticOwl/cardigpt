@@ -5,6 +5,3 @@ Author: malli
 Created: 06-10-2024
 Description: write_a_description
 """
-
-from ECGDataset import ECGDataset
-from ECGData import ECGData
