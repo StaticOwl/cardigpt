@@ -14,9 +14,9 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 
-from pred_res.dataset import ECGDataset
-from pred_res.model import resnet18
-from pred_res.utils.freeze import set_freeze_by_id
+from dataset import ECGDataset
+from model import resnet18
+from utils.freeze import set_freeze_by_id
 
 
 class Trainer:

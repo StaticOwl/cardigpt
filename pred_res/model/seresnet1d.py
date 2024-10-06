@@ -7,9 +7,9 @@ Description: SEResNet1D model definition
 """
 import torch.nn as nn
 
-from pred_res.model.basicblock import BasicBlock
-from pred_res.model.bottleneck import BottleNeck
-from pred_res.model.util import conv1x1
+from basicblock import BasicBlock
+from bottleneck import BottleNeck
+from util import conv1x1
 
 
 class ResNet(nn.Module):

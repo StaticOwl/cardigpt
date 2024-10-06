@@ -7,8 +7,8 @@ Description: ResNet bottleneck block
 """
 from torch import nn
 
-from pred_res.model.selayer import SELayer
-from pred_res.model.util import conv1x1, conv7x1
+from selayer import SELayer
+from util import conv1x1, conv7x1
 
 
 class BottleNeck(nn.Module):
