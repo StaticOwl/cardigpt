@@ -40,7 +40,7 @@ def kaggle_data_downloader(datadict, flag=False):
             dataset_path = 'input_data'
 
             if key not in os.listdir(dataset_path):
-                api.dataset_download_files(value['source'], path=dataset_path, unzip=True)
+                api.dataset_download_files(value['source'], path=dataset_path, unzip=True, quiet=False)
                 folder_path = os.path.join(dataset_path, value['inside_folder'])
 
                 # Move files from inside folder to the main dataset path
