@@ -1,9 +1,9 @@
 from torch.utils import model_zoo
 
-from pred_res.model.basicblock import BasicBlock
-from pred_res.model.bottleneck import BottleNeck
-from pred_res.model.seresnet1d import ResNet
-from pred_res.model.util import resnet_model_urls
+from .basicblock import BasicBlock
+from .bottleneck import BottleNeck
+from .seresnet1d import ResNet
+from .util import resnet_model_urls
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
