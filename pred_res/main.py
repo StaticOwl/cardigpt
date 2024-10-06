@@ -10,9 +10,9 @@ from logging_config import setup_logging
 
 import logging
 
-from .train.train import Trainer
-from .utils.datasplit import read_and_split_data
-from .utils.downloader import kaggle_data_downloader
+from train.train import Trainer
+from utils.datasplit import read_and_split_data
+from utils.downloader import kaggle_data_downloader
 
 logger = logging.getLogger(__name__)
 
