@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument('--win_length', type=int, default=4096, help='window length')
     parser.add_argument('--overlap', type=int, default=256, help='overlap')
     parser.add_argument('--log_step', type=int, default=10, help='step after log prints during training')
+    parser.add_argument('--model_name', type=str, default='resnet18', help='the name of the model')
 
     return parser.parse_args()
 

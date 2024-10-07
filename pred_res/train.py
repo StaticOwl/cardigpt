@@ -15,7 +15,7 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 
 from dataset.ECGDataset import ECGDataset
-from model import resnet18
+import model
 from utils.freeze import set_freeze_by_id
 
 
@@ -77,7 +77,8 @@ class Trainer:
             for x in ['train', 'val']
         }
         self.num_classes = ECGDataset.num_classes
-        self.model = resnet18(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes)
+        model_name = getattr(model, args.model_name)
+        self.model = model_name(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes)
         if args.layers_num_last is not None:
             if args.layers_num_last != 0:
                 set_freeze_by_id(self.model, args.layers_num_last)
