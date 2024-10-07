@@ -10,7 +10,7 @@ import pandas as pd
 import torch
 
 
-def cal_Acc(y_true, y_pre, threshold=0.5, num_classes=9, beta=2, normal=False):
+def cal_acc(y_true, y_pre, threshold=0.5):
     y_true = y_true.cpu().detach().numpy().astype(np.int)
 
     y_label = np.zeros(y_true.shape)

@@ -16,6 +16,7 @@ from torch.utils.data import DataLoader
 
 import model
 from dataset.ECGDataset import ECGDataset
+from utils.metrics import cal_acc
 from utils.freeze import set_freeze_by_id
 
 
@@ -44,7 +45,7 @@ class Trainer:
         self.criterion = None
         self.device = None
         self.start_epoch = 0
-        self.cal_acc = None
+        self.cal_acc = cal_acc
 
     def setup(self):
         """
@@ -201,7 +202,7 @@ class Trainer:
 
                         step += 1
 
-                metric = self.cal_acc(labels_all, logits_prob_all, threshold=0.5, num_classes=self.num_classes)
+                metric = self.cal_acc(labels_all, logits_prob_all)
 
                 epoch_loss = epoch_loss / len(self.dataloaders[phase].dataset)
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-challenge_metric: {:.4f}, Cost {:.1f} sec'.
