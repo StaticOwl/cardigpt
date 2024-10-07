@@ -14,7 +14,7 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 
-from dataset import ECGDataset
+from dataset.ECGDataset import ECGDataset
 from model import resnet18
 from utils.freeze import set_freeze_by_id
 
