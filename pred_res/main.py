@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument('--layers_num_last', type=int, default=0, help='the number of last layers which unfreeze')
     parser.add_argument('--lr', type=float, default=0.0003, help='the initial learning rate')
     parser.add_argument('--weight_decay', type=float, default=1e-5, help='the weight decay')
-    parser.add_argument('--step_size', type=str, default='3', help='stepLR step decay')
+    parser.add_argument('--step_size', type=int, default=3, help='stepLR step decay')
     parser.add_argument('--gamma', type=float, default=0.1, help='learning rate scheduler parameter for step and exp')
     parser.add_argument('--max_epoch', type=int, default=5, help='max number of epoch')
     parser.add_argument('--win_length', type=int, default=4096, help='window length')
