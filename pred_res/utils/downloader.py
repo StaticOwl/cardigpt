@@ -54,10 +54,12 @@ def kaggle_data_downloader(datadict, flag=False):
             dataset_path = data_dir
 
             if key not in dataset_path.iterdir():
+                logger.info('Downloading dataset {}'.format(key))
                 api.dataset_download_files(value['source'], path=dataset_path, unzip=True, quiet=False)
                 folder_path = dataset_path / value['inside_folder']
 
                 # Move files from inside folder to the main dataset path
+                logger.info('Moving files from {} to {}'.format(folder_path, dataset_path))
                 for file in folder_path.iterdir():
                     file.rename(dataset_path / file.name)
                 shutil.rmtree(folder_path)
