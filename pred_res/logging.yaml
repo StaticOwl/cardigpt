@@ -1,5 +1,3 @@
-# logging.yaml
-
 version: 1
 disable_existing_loggers: False
 
@@ -10,7 +8,7 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
-    level: DEBUG
+    level: ERROR
     formatter: standard
     stream: ext://sys.stdout
 
@@ -18,8 +16,7 @@ handlers:
     class: logging.FileHandler
     level: DEBUG
     formatter: standard
-    filename: 'project.log'
-    mode: 'w'
+    filename: 'logs/project_timestamp.log'  # Placeholder for dynamic filename
 
 root:
   level: DEBUG
