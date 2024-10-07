@@ -225,8 +225,8 @@ class Trainer:
             if self.lr_scheduler is not None:
                 self.lr_scheduler.step()
 
-    def nn_forward(self, inputs, labels):
-        logits = self.model(inputs)
+    def nn_forward(self, inputs, ag, labels):
+        logits = self.model(inputs, ag)
         logits_prob = self.sigmoid(logits)
         tmp_loss = self.criterion(logits, labels).item() * inputs.size(0)
         return logits_prob, tmp_loss
