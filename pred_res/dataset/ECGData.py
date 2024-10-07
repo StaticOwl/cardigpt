@@ -34,42 +34,22 @@ class ECGData(Dataset):
         return len(self.data)
 
     def __getitem__(self, item):
-        # Ensure that item is a list (for both batch and single item cases)
-        if not isinstance(item, (list, np.ndarray)):
-            item = [item]  # Wrap a single item into a list
-
-        items = []
-        age_genders = []
-        labels = []
-        item_paths = []
-
-        for i in item:
-            if self.test:
-                item_path = self.data[i]
-                fs = self.fs[i]
-                signal = load_data(self.data_dir + item_path, src_fs=fs)
-                signal = self.transform(signal)
-                items.append(signal)
-                item_paths.append(item_path)
-            else:
-                item_name = self.data[i]
-                fs = self.fs[i]
-                age = self.age[i]
-                gender = self.gender[i]
-                age_gender = prepare_data(age, gender)
-                signal = load_data(item_name, src_fs=fs)
-                signal = self.transform(signal)
-                label = self.multi_labels[i]
-                items.append(signal)
-                age_genders.append(torch.from_numpy(age_gender).float())
-                labels.append(torch.from_numpy(label).float())
-
-        # If test mode, return only items and item_paths
         if self.test:
-            return items, item_paths
-
-        # Return stacked tensors for non-test mode
-        return items, torch.stack(age_genders), torch.stack(labels)
+            item_path = self.data[item]
+            fs = self.fs[item]
+            item = load_data(self.data_dir + item_path, src_fs=fs)
+            item = self.transform(item)
+            return item, item_path
+        else:
+            item_name = self.data[item]
+            fs = self.fs[item]
+            age = self.age[item]
+            gender = self.gender[item]
+            age_gender = prepare_data(age, gender)
+            item = load_data(item_name, src_fs=fs)
+            label = self.multi_labels[item]
+            item = self.transform(item)
+            return item, torch.from_numpy(age_gender).float(), torch.from_numpy(label).float()
 
 
 def load_data(case, src_fs, tar_fs=257):
