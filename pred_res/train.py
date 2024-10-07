@@ -103,11 +103,7 @@ class Trainer:
 
         for epoch in range(self.start_epoch, args.max_epoch):
             logging.info('-' * 5 + 'Epoch {}/{}'.format(epoch, args.max_epoch - 1) + '-' * 5)
-            # Update the learning rate
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step(epoch)
-            else:
-                logging.info('current lr: {}'.format(args.lr))
+
 
             # Each epoch has a training and val phase
             for phase in ['train', 'val']:
@@ -212,6 +208,12 @@ class Trainer:
                         best_acc = epoch_acc
                         torch.save(model_state,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
+
+            # Update the learning rate
+            if self.lr_scheduler is not None:
+                self.lr_scheduler.step()
+            else:
+                logging.info('current lr: {}'.format(args.lr))
 
             if self.lr_scheduler is not None:
                 self.lr_scheduler.step()
