@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--download', action='store_true')
+    parser.add_argument('--prepare_train', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./trained_model', help='the directory to save latest trained model')
     parser.add_argument('--split', type=str, default='0', help='The number of split')
     parser.add_argument('--data_dir', type=str, default='./data', help='the directory of the data')
@@ -44,7 +45,7 @@ if __name__ == '__main__':
     with open(os.path.join(os.path.dirname(__file__), 'datadict.json')) as f:
         datadict = json.load(f)
     kaggle_data_downloader(datadict, args.download)
-    if not args.download:
+    if args.download or args.prepare_train:
         read_and_split_data('./input_data/train/')
 
     for k, v in args.__dict__.items():
