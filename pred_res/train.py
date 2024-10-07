@@ -14,8 +14,8 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 
-from dataset.ECGDataset import ECGDataset
 import model
+from dataset.ECGDataset import ECGDataset
 from utils.freeze import set_freeze_by_id
 
 
@@ -103,43 +103,63 @@ class Trainer:
 
         for epoch in range(self.start_epoch, args.max_epoch):
             logging.info('-' * 5 + 'Epoch {}/{}'.format(epoch, args.max_epoch - 1) + '-' * 5)
-            # Update the learning rate
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step(epoch)
-            else:
-                logging.info('current lr: {}'.format(args.lr))
 
-            # Each epoch has a training and val phase
+            # Each epoch has a training and validation phase
             for phase in ['train', 'val']:
-                # Define the temp variable
                 epoch_loss = 0.0
                 batch_length = 0
                 batch_count = 0
                 batch_loss = 0.0
-                # Iterate over data.
+
                 if phase == 'train':
                     self.model.train()
                 else:
                     self.model.eval()
+
                 for batch_idx, (inputs, labels) in enumerate(self.dataloaders[phase]):
                     inputs = inputs.to(self.device)
                     labels = labels.to(self.device)
-                    # zero the parameter gradients
+
+                    # Zero the parameter gradients for the training phase
                     if phase == 'train':
-                        logits = self.model(inputs)
-                        logits_prob = self.sigmoid(logits)
+                        self.optimizer.zero_grad()
 
-                        if batch_idx == 0:
-                            labels_all = labels
-                            logits_prob_all = logits_prob
-                        else:
-                            labels_all = torch.cat((labels_all, labels), dim=0)
-                            logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
+                    logits = self.model(inputs)
+                    logits_prob = self.sigmoid(logits)
 
-                        loss = self.criterion(logits, labels)
-                        loss_temp = loss.item() * inputs.size(0)
-                        epoch_loss += loss_temp
+                    if batch_idx == 0:
+                        labels_all = labels
+                        logits_prob_all = logits_prob
                     else:
+                        labels_all = torch.cat((labels_all, labels), dim=0)
+                        logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
+
+                    loss = self.criterion(logits, labels)
+                    loss_temp = loss.item() * inputs.size(0)
+                    epoch_loss += loss_temp
+
+                    if phase == 'train':
+                        # Backpropagation and optimization
+                        loss.backward()
+                        self.optimizer.step()
+
+                        batch_loss += loss_temp
+                        batch_count += inputs.size(0)
+                        batch_length += 1
+
+                        if step % args.log_step == 0:
+                            train_time = time.time() - step_start
+                            batch_time = train_time / args.print_step if step != 0 else train_time
+                            logging.info('Epoch[{}/{}], Step[{}/{}], loss: {:.4f},'
+                                         'lr: {:.1f} examples/sec {:.2f} sec/batch'
+                                         .format(epoch, args.max_epoch, step,
+                                                 args.max_epoch * len(self.dataloaders[phase].dataset),
+                                                 batch_loss / batch_count, 1.0 * batch_count / train_time,
+                                                 batch_time))
+                            batch_loss = 0.0
+                            batch_count = 0
+                    else:
+                        # Validation logic
                         val_length = inputs.shape[2]
                         win_length = args.win_length if args.win_length else 4096
                         overlap = args.overlap if args.overlap else 256
@@ -150,58 +170,24 @@ class Trainer:
                             start = 0
                         for i in range(patch_number):
                             if i == 0:
-                                logits_prob, loss_temp = self.nn_forward(inputs[:, :, start:start + win_length],
-                                                                         labels)
+                                logits_prob, loss_temp = self.nn_forward(inputs[:, :, start:start + win_length], labels)
                             elif i == patch_number - 1:
                                 logits_prob_tmp, loss_temp_tmp = self.nn_forward(
-                                    inputs[:, :, start + win_length:],
-                                    labels)
+                                    inputs[:, :, start + win_length:], labels)
                                 logits_prob = (logits_prob + logits_prob_tmp) / patch_number
                                 loss_temp = (loss_temp + loss_temp_tmp) / patch_number
                             else:
                                 logits_prob_tmp, loss_temp_tmp = self.nn_forward(
-                                    inputs[:, :, start + win_length:start + win_length + overlap],
-                                    labels)
+                                    inputs[:, :, start + win_length:start + win_length + overlap], labels)
                                 logits_prob = logits_prob + logits_prob_tmp
                                 loss_temp = loss_temp + loss_temp_tmp
+
                             epoch_loss += loss_temp
 
-                        if batch_idx == 0:
-                            labels_all = labels
-                            logits_prob_all = logits_prob
-                        else:
-                            labels_all = torch.cat((labels_all, labels), dim=0)
-                            logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
-                        epoch_loss += loss_temp
-
-                        if phase == 'train':
-                            self.optimizer.zero_grad()
-                            loss.backward()
-                            self.optimizer.step()
-
-                            batch_loss += loss_temp
-                            batch_count += inputs.size(0)
-                            batch_length += 1
-                            if step % args.log_step == 0:
-                                train_time = time.time() - step_start
-                                batch_time = train_time / args.print_step if step != 0 else train_time
-                                logging.info('Epoch[{}/{}], Step[{}/{}], loss: {:.4f},'
-                                             'lr: {:.1f} examples/sec {:.2f} sec/batch'
-                                             .format(epoch, args.max_epoch, step,
-                                                     args.max_epoch * len(self.dataloaders[phase].dataset),
-                                                     batch_loss / batch_count, 1.0 * batch_count / train_time,
-                                                     batch_time))
-                                batch_loss = 0.0
-                                batch_count = 0
                     step += 1
 
                 epoch_loss = epoch_loss / len(self.dataloaders[phase].dataset)
-                logging.info('Epoch[{}/{}], Loss: {:.4f},'
-                             'lr: {:.1f} examples/sec {:.2f} sec/batch'
-                             .format(epoch, args.max_epoch, epoch_loss,
-                                     1.0 * len(self.dataloaders[phase].dataset) / epoch_loss,
-                                     1.0 * len(self.dataloaders[phase].dataset) / epoch_loss,
-                                     1.0 * len(self.dataloaders[phase].dataset) / epoch_loss))
+                logging.info('Epoch[{}/{}], Loss: {:.4f}'.format(epoch, args.max_epoch, epoch_loss))
 
                 epoch_acc = self.cal_acc(logits_prob_all, labels_all, threshold=0.5, num_classes=self.num_classes)
 
@@ -212,8 +198,9 @@ class Trainer:
                         torch.save(model_state,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
 
+            # Update the learning rate after the optimizer step
             if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
+                self.lr_scheduler.step()  # Removed the epoch argument
 
     def nn_forward(self, inputs, labels):
         logits = self.model(inputs)
