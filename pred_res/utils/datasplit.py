@@ -5,7 +5,9 @@ Author: malli
 Created: 06-10-2024
 Description: write_a_description
 """
+import logging
 import os
+import shutil
 
 import numpy as np
 import pandas as pd
@@ -19,6 +21,16 @@ def read_and_split_data(data_directory):
 
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
+    else:
+        for f in os.listdir(save_dir):
+            file_path = os.path.join(save_dir, f)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                logging.error(e)
 
     input_files = ls_dir(rootdir=data_directory, suffix=".mat")
 
@@ -68,7 +80,7 @@ def read_and_split_data(data_directory):
                 data_split_val = pd.concat([data_split_val, dataset_val[j][i]], ignore_index=True)
 
         data_split_train.to_csv(os.path.join(save_dir, '%s.csv' % ('train_split' + str(i))), sep=',', index=False)
-        data_split_val.to_csv(os.path.join(save_dir, '%s.csv' % ('test_split' + str(i))), sep=',', index=False)
+        data_split_val.to_csv(os.path.join(save_dir, '%s.csv' % ('val_split' + str(i))), sep=',', index=False)
 
 
 def ls_dir(rootdir="", suffix=".png"):
