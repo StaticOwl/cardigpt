@@ -26,7 +26,7 @@ def parse_args():
     parser.add_argument('--data_dir', type=str, default='./data', help='the directory of the data')
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
     parser.add_argument('--num_workers', type=int, default=0, help='the number of training process')
-    parser.add_argument('--layer_num_last', type=int, default=0, help='the number of last layers which unfreeze')
+    parser.add_argument('--layers_num_last', type=int, default=0, help='the number of last layers which unfreeze')
     parser.add_argument('--lr', type=float, default=0.0003, help='the initial learning rate')
     parser.add_argument('--weight_decay', type=float, default=1e-5, help='the weight decay')
     parser.add_argument('--step_size', type=str, default='3', help='stepLR step decay')
