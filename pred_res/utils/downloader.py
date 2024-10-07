@@ -73,7 +73,7 @@ def kaggle_data_downloader(datadict, flag=False):
                     grouped_files[basename] = []
                 grouped_files[basename].append(file)
 
-            train_group, test_group = train_test_split(list(grouped_files.values()), test_size=0.2, random_state=42)
+            train_group, test_group = train_test_split(list(grouped_files.values()), test_size=0.1, random_state=42)
 
             # Move files to respective directories
             for group in train_group:
