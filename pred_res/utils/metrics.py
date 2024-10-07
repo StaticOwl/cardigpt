@@ -11,7 +11,7 @@ import torch
 
 
 def cal_acc(y_true, y_pre, threshold=0.5):
-    y_true = y_true.cpu().detach().numpy().astype(np.int)
+    y_true = y_true.cpu().detach().numpy().astype(int)
 
     y_label = np.zeros(y_true.shape)
     # Generate the one hot encoding labels
