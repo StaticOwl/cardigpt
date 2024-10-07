@@ -46,7 +46,7 @@ class ResNet(nn.Module):
         ])
         self.avgpool = nn.AdaptiveAvgPool1d(1)
         self.small_fc = nn.Linear(5, 10)
-        self.fc = nn.Linear(512 * block.expansion, out_channel)
+        self.fc = nn.Linear(512 * block.expansion + 10, out_channel)
         self.sig = nn.Sigmoid()
 
         self._init_weights(ze)
