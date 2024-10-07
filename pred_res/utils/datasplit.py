@@ -52,11 +52,12 @@ def read_and_split_data(data_directory):
 
             class_df_all = class_df_all.drop(droplist, axis=1)
             class_df_all = class_df_all.dropna()
+            class_df_all = modifying_filename(class_df_all, data_directory)
 
             train_labels = class_df_all.loc[:, (class_df_all.sum(axis=0) != 0)].iloc[:, 3:].values
             train_tmp, val_tmp = data_split(df=class_df_all, labels=train_labels, n_split=split_number)
-            dataset_train.append(modifying_filename(train_tmp, data_directory))
-            dataset_val.append(modifying_filename(val_tmp, data_directory))
+            dataset_train.append(train_tmp)
+            dataset_val.append(val_tmp)
 
     for i in tqdm(range(split_number)):
         data_split_train = dataset_train[0][i].copy()

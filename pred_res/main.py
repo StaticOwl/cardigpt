@@ -44,7 +44,7 @@ if __name__ == '__main__':
     with open(os.path.join(os.path.dirname(__file__), 'datadict.json')) as f:
         datadict = json.load(f)
     kaggle_data_downloader(datadict, args.download)
-    if args.download:
+    if not args.download:
         read_and_split_data('./input_data/train/')
 
     for k, v in args.__dict__.items():
