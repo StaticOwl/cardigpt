@@ -5,12 +5,16 @@ Author: malli
 Created: 04-10-2024
 Description: SEResNet1D model definition
 """
+import logging
+
 import torch
 import torch.nn as nn
 
 from .basicblock import BasicBlock
 from .bottleneck import BottleNeck
 from .util import conv1x1
+
+logger = logging.getLogger(__name__)
 
 
 class ResNet(nn.Module):
@@ -111,6 +115,7 @@ class ResNet(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         ag = self.small_fc(ag)
+        logging.log(f"x shape: {x.shape}, ag shape: {ag.shape}")
         x = torch.cat((ag, x), dim=1)
         x = self.fc(x)
         x = self.sig(x)
