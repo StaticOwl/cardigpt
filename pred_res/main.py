@@ -50,7 +50,7 @@ if __name__ == '__main__':
         read_and_split_data('./input_data/train/')
 
     for k, v in args.__dict__.items():
-        logging.info("{}: {}".format(k, v))
+        logger.info("{}: {}".format(k, v))
 
     trainer = Trainer(args)
     trainer.setup()
