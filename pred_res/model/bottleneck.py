@@ -27,18 +27,24 @@ class BottleNeck(nn.Module):
         self.downsample = downsample
         self.stride = stride
         self.se = SELayer(out_planes * self.expansion)
+        self.dropout = nn.Dropout(.2)
 
     def forward(self, x):
         residual = x
+
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
+
         out = self.conv2(out)
         out = self.bn2(out)
         out = self.relu(out)
+        out = self.dropout(out)
+
         out = self.conv3(out)
         out = self.bn3(out)
         out = self.se(out)
+
         if self.downsample:
             residual = self.downsample(x)
         out += residual
