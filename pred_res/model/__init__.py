@@ -5,8 +5,13 @@ from .bottleneck import BottleNeck
 from .seresnet1d import ResNet
 from .util import resnet_model_urls
 
-__all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
+__all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
+
+
+def resnet(pretrained=False, **kwargs):
+    model = ResNet(BottleNeck, [3, 4, 6, 3], **kwargs)
+    return model
 
 
 def resnet18(pretrained=False, **kwargs):
@@ -29,7 +34,7 @@ def resnet34(pretrained=False, **kwargs):
     """
     model = ResNet(BasicBlock, [3, 4, 6, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet34']))
+        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet34']), strict=False)
     return model
 
 
@@ -41,7 +46,7 @@ def resnet50(pretrained=False, **kwargs):
     """
     model = ResNet(BottleNeck, [3, 4, 6, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet50']))
+        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet50']), strict=False)
     return model
 
 
@@ -53,7 +58,7 @@ def resnet101(pretrained=False, **kwargs):
     """
     model = ResNet(BottleNeck, [3, 4, 23, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet101']))
+        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet101']), strict=False)
     return model
 
 
@@ -65,6 +70,5 @@ def resnet152(pretrained=False, **kwargs):
     """
     model = ResNet(BottleNeck, [3, 8, 36, 3], **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet152']))
+        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet152']), strict=False)
     return model
-
