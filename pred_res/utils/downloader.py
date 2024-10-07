@@ -50,13 +50,22 @@ def kaggle_data_downloader(datadict, flag=False):
 
             # Split data into train and test sets
             all_files = [f for f in os.listdir(dataset_path) if f not in ['train', 'test']]
-            train_files, test_files = train_test_split(all_files, test_size=0.2, random_state=42)
+            grouped_files = {}
+            for file in all_files:
+                basename, _ = os.path.splitext(file)
+                if basename not in grouped_files:
+                    grouped_files[basename] = []
+                grouped_files[basename].append(file)
+
+            train_group, test_group = train_test_split(list(grouped_files.values()), test_size=0.2, random_state=42)
 
             # Move files to respective directories
-            for file in train_files:
-                shutil.move(os.path.join(dataset_path, file), os.path.join(train_dir, file))
-            for file in test_files:
-                shutil.move(os.path.join(dataset_path, file), os.path.join(test_dir, file))
+            for group in train_group:
+                for file in group:
+                    shutil.move(os.path.join(dataset_path, file), os.path.join(train_dir, file))
+            for group in test_group:
+                for file in group:
+                    shutil.move(os.path.join(dataset_path, file), os.path.join(test_dir, file))
 
         # Save updated datadict with paths (optional)
         with open('datadict.json', 'w') as f:
