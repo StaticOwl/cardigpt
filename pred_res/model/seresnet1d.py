@@ -5,6 +5,7 @@ Author: malli
 Created: 04-10-2024
 Description: SEResNet1D model definition
 """
+import torch
 import torch.nn as nn
 
 from .basicblock import BasicBlock
@@ -16,6 +17,7 @@ class ResNet(nn.Module):
     """
     SEResNet1D model definition
     """
+
     def __init__(self, block, num_blocks, in_channel=1, out_channel=10, ze=False):
         """
         :param block: block type (BasicBlock or BottleNeck)
@@ -39,6 +41,7 @@ class ResNet(nn.Module):
             self._make_layer(block, 512, num_blocks[3], stride=2)
         ])
         self.avgpool = nn.AdaptiveAvgPool1d(1)
+        self.small_fc = nn.Linear(5, 10)
         self.fc = nn.Linear(512 * block.expansion, out_channel)
         self.sig = nn.Sigmoid()
 
@@ -90,7 +93,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x):
+    def forward(self, x, ag):
         """
         Forward pass of the ResNet.
 
@@ -107,6 +110,8 @@ class ResNet(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
+        ag = self.small_fc(ag)
+        x = torch.cat((ag, x), dim=1)
         x = self.fc(x)
         x = self.sig(x)
 
