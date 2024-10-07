@@ -14,7 +14,6 @@ from torch.utils.data import Dataset
 class ECGData(Dataset):
 
     def __init__(self, anno_pd, test=False, transform=None, data_dir=None):
-        self.anno_pd = anno_pd
         self.test = test
         self.transform = transform
         self.data_dir = data_dir
@@ -41,15 +40,15 @@ class ECGData(Dataset):
             item = self.transform(item)
             return item, item_path
         else:
-            item_name = self.data[item]
+            img_name = self.data[item]
             fs = self.fs[item]
             age = self.age[item]
             gender = self.gender[item]
             age_gender = prepare_data(age, gender)
-            item = load_data(item_name, src_fs=fs)
+            img = load_data(img_name, src_fs=fs)
             label = self.multi_labels[item]
-            item = self.transform(item)
-            return item, torch.from_numpy(age_gender).float(), torch.from_numpy(label).float()
+            img = self.transform(img)
+            return img, torch.from_numpy(age_gender).float(), torch.from_numpy(label).float()
 
 
 def load_data(case, src_fs, tar_fs=257):
