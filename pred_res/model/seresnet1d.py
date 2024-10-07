@@ -115,7 +115,7 @@ class ResNet(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         ag = self.small_fc(ag)
-        logger.debug(f"x shape: {x.shape}, ag shape: {ag.shape}")
+        # logger.debug(f"x shape: {x.shape}, ag shape: {ag.shape}")
         x = torch.cat((ag, x), dim=1)
         x = self.fc(x)
         x = self.sig(x)
