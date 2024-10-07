@@ -19,7 +19,7 @@ class SELayer(nn.Module):
             reduction (int, optional): Reduction ratio for the FC layers.
                 Defaults to 16.
         """
-        super().__init__()
+        super(SELayer, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool1d(1)
         self.fc = nn.Sequential(
             nn.Linear(channel, channel // reduction, bias=False),
@@ -40,4 +40,4 @@ class SELayer(nn.Module):
         b, c, _ = x.size()
         y = self.avg_pool(x).view(b, c)
         y = self.fc(y).view(b, c, 1)
-        return x * y
+        return x * y.expand_as(x)
