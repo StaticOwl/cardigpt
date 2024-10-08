@@ -154,12 +154,12 @@ class Trainer:
                         if phase == 'train':
                             logits = self.model(inputs, ag)
                             logits_prob = self.sigmoid(logits)
-                            # if batch_idx == 0:
-                            #     labels_all = labels
-                            #     logits_prob_all = logits_prob
-                            # else:
-                            #     labels_all = torch.cat((labels_all, labels), dim=0)
-                            #     logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
+                            if batch_idx == 0:
+                                labels_all = labels
+                                logits_prob_all = logits_prob
+                            else:
+                                labels_all = torch.cat((labels_all, labels), dim=0)
+                                logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
 
                             loss = self.criterion(logits, labels)
                             loss_temp = loss.item() * inputs.size(0)
