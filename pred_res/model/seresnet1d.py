@@ -22,11 +22,10 @@ class ResNet(nn.Module):
     SEResNet1D model definition
     """
 
-    def __init__(self, block, num_blocks, args, in_channel=1, out_channel=10, ze=False):
+    def __init__(self, block, num_blocks, in_channel=1, out_channel=10, ze=False):
         """
         :param block: block type (BasicBlock or BottleNeck)
         :param num_blocks: number of blocks in each layer
-        :param args: model parameters
         :param in_channel: number of input channels
         :param out_channel: number of output channels
         :param ze: whether to use zero initializations for the last BN in each
@@ -39,13 +38,12 @@ class ResNet(nn.Module):
         self.bn1 = nn.BatchNorm1d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool1d(kernel_size=3, stride=2, padding=1)
-
-        # build layers
-        res_layer = []
-        for i in range(args.res_layer_num):
-            res_layer.append(self._make_layer(block, 64 * (i + 1), num_blocks[i]))
-
-        self.layers = nn.ModuleList(res_layer)
+        self.layers = nn.ModuleList([
+            self._make_layer(block, 64, num_blocks[0]),
+            self._make_layer(block, 128, num_blocks[1], stride=2),
+            self._make_layer(block, 256, num_blocks[2], stride=2),
+            self._make_layer(block, 512, num_blocks[3], stride=2)
+        ])
         self.avgpool = nn.AdaptiveAvgPool1d(1)
         self.small_fc = nn.Linear(5, 10)
         self.fc = nn.Linear(512 * block.expansion + 10, out_channel)
