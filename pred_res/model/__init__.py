@@ -26,7 +26,12 @@ def resnet18(pretrained=False, **kwargs):
     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
     logger.info("model: %s" % model)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
+        pretrained_model = model_zoo.load_url(resnet_model_urls['resnet18'], model_dir='./model_zoo')
+        model_dict = model.state_dict()
+        pretrained_dict = {k: v for k, v in pretrained_model.items() if k in model_dict}
+        model_dict.update(pretrained_dict)
+        model.load_state_dict(model_dict, strict=False)
+        # model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
     return model
 
 
