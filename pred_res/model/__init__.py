@@ -10,7 +10,7 @@ __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
 
 
 def resnet(pretrained=False, **kwargs):
-    model = ResNet(BasicBlock, [3, 4, 6, 3], **kwargs)
+    model = ResNet(block=BasicBlock, num_blocks=[3, 4, 6, 3], **kwargs)
     return model
 
 

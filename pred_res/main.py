@@ -22,6 +22,7 @@ def parse_args():
     parser.add_argument('--download', action='store_true')
     parser.add_argument('--prepare_train', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./trained_model', help='the directory to save latest trained model')
+    parser.add_argument('--res_layer_num', type=int, default=4, help='the number of resnet layers')
     parser.add_argument('--split', type=str, default='0', help='The number of split')
     parser.add_argument('--data_dir', type=str, default='./data', help='the directory of the data')
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
