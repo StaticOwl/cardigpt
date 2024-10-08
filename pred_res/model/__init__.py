@@ -1,3 +1,5 @@
+import logging
+
 from torch.utils import model_zoo
 
 from .basicblock import BasicBlock
@@ -5,6 +7,7 @@ from .bottleneck import BottleNeck
 from .seresnet1d import ResNet
 from .util import resnet_model_urls
 
+logger = logging.getLogger(__name__)
 __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
 
@@ -21,6 +24,7 @@ def resnet18(pretrained=False, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
+    logger.info("model: %s" % model)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
     return model
