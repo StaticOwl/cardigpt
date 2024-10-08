@@ -1,5 +1,6 @@
 import logging
 
+import torch
 from torch.utils import model_zoo
 
 from .basicblock import BasicBlock
@@ -17,25 +18,23 @@ def resnet(pretrained=False, **kwargs):
     return model
 
 
+def resnet_custom(pretrained=False, **kwargs):
+    model = ResNet(block=BasicBlock, num_blocks=[2, 2, 2, 2], **kwargs)
+    if pretrained:
+        model.load_state_dict(torch.load(), strict=False)
+    return model
+
+
 def resnet18(pretrained=False, **kwargs):
     """Constructs a ResNet-18 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
+    logger.info('loading resnet18')
     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
-    logger.info("model: %s" % model)
     if pretrained:
-        pretrained_model = model_zoo.load_url(resnet_model_urls['resnet18'], model_dir='./model_zoo')
-        model_dict = model.state_dict()
-        filtered_pretrained_dict = {}
-        for k, v in pretrained_model.items():
-            if k in model_dict and model_dict[k].size() == v.size():
-                filtered_pretrained_dict[k] = v
-                logger.debug("Updating %s with size %s" % (k, str(v.size())))
-        model_dict.update(filtered_pretrained_dict)
-        model.load_state_dict(model_dict, strict=False)
-        # model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
+        model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
     return model
 
 
