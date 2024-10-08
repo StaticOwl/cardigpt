@@ -34,6 +34,10 @@ class Trainer:
             criterion: The loss function for the training process
             device: The device to be used for training
         """
+        self.early_stop = args.early_stop
+        self.patience = args.patience
+        self.epochs_since_improvement = 0
+        self.min_delta = args.min_delta
         self.num_classes = None
         self.save_dir = args.save_dir
         self.sigmoid = nn.Sigmoid()
@@ -153,7 +157,7 @@ class Trainer:
                         # track history if only in train
                         if phase == 'train':
                             logits = self.model(inputs, ag)
-                            # logits_prob = self.sigmoid(logits)
+                            logits_prob = self.sigmoid(logits)
                             logits_prob = logits
                             if batch_idx == 0:
                                 labels_all = labels
@@ -181,7 +185,7 @@ class Trainer:
                                 batch_time = train_time / args.log_step if step != 0 else train_time
                                 samples_per_sec = 1.0 * batch_count / train_time
                                 logging.info('Epoch: {} [{}/{}], Train Loss: {:.4f},'
-                                             '{:.1f} examples/sec {:.2f} sec/batch'.format(
+                                             'samples/sec: {:.1f} examples/sec, time: {:.2f} sec/batch'.format(
                                     epoch, batch_idx * len(inputs), len(self.dataloaders[phase].dataset),
                                     batch_loss_avg, samples_per_sec, batch_time
                                 ))
@@ -227,13 +231,24 @@ class Trainer:
                 writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-challenge_metric: {:.4f}, Cost {:.1f} sec'.
                              format(epoch, phase, epoch_loss, phase, metric, time.time() - epoch_start))
-                epoch_acc = metric
 
-                if phase == 'val' and epoch_acc > best_acc:
-                    model_state = self.model.module.state_dict() if self.device_count > 1 else self.model.state_dict()
-                    best_acc = epoch_acc
-                    torch.save(model_state,
-                               os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
+                if phase == 'val':
+                    epoch_acc = metric
+                    if epoch_acc > best_acc + self.min_delta:
+                        best_acc = epoch_acc
+                        self.epochs_since_improvement = 0
+
+                        model_state = self.model.module.state_dict() if self.device_count > 1 else self.model.state_dict()
+                        torch.save(model_state,
+                                   os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
+                        logging.info(f'New best model saved at epoch {epoch} with accuracy {best_acc:.4f}')
+                    else:
+                        self.epochs_since_improvement += 1
+                        if self.early_stop and self.epochs_since_improvement > self.patience:
+                            logging.info(f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
+                        writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
+                        writer.close()
+                        return
 
             # Update the learning rate
             if self.lr_scheduler is not None:

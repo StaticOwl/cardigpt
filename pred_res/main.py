@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--download', action='store_true')
+    parser.add_argument('--early_stop', action='store_true')
     parser.add_argument('--prepare_train', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./trained_model', help='the directory to save latest trained model')
     parser.add_argument('--split', type=str, default='0', help='The number of split')
@@ -36,6 +37,8 @@ def parse_args():
     parser.add_argument('--overlap', type=int, default=256, help='overlap')
     parser.add_argument('--log_step', type=int, default=10, help='step after log prints during training')
     parser.add_argument('--model_name', type=str, default='resnet', help='the name of the model')
+    parser.add_argument('--patience', type=int, default=40, help='the patience for early stop')
+    parser.add_argument('--min_delta', type=float, default=0.0001, help='the min delta for early stop')
 
     return parser.parse_args()
 
