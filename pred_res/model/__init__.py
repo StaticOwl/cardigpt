@@ -28,7 +28,11 @@ def resnet18(pretrained=False, **kwargs):
     if pretrained:
         pretrained_model = model_zoo.load_url(resnet_model_urls['resnet18'], model_dir='./model_zoo')
         model_dict = model.state_dict()
-        filtered_pretrained_dict = {k: v for k, v in pretrained_model.items() if k in model_dict and model_dict[k].size() == v.size()}
+        filtered_pretrained_dict = {}
+        for k, v in pretrained_model.items():
+            if k in model_dict and model_dict[k].size() == v.size():
+                filtered_pretrained_dict[k] = v
+                logger.debug("Updating %s with size %s" % (k, str(v.size())))
         model_dict.update(filtered_pretrained_dict)
         model.load_state_dict(model_dict, strict=False)
         # model.load_state_dict(model_zoo.load_url(resnet_model_urls['resnet18']), strict=False)
