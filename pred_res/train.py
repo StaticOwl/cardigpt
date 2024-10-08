@@ -240,6 +240,8 @@ class Trainer:
             else:
                 logging.info('current lr: {}'.format(args.lr))
 
+        writer.close()
+
     def nn_forward(self, inputs, ag, labels):
         logits = self.model(inputs, ag)
         logits_prob = self.sigmoid(logits)
