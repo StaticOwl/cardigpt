@@ -90,7 +90,7 @@ class Trainer:
 
         self.optimizer = optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()), lr=args.lr,
                                     weight_decay=args.weight_decay)
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.BCEWithLogitsLoss()
         self.lr_scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=args.step_size, gamma=args.gamma)
         self.model.to(self.device)
 
@@ -153,7 +153,8 @@ class Trainer:
                         # track history if only in train
                         if phase == 'train':
                             logits = self.model(inputs, ag)
-                            logits_prob = self.sigmoid(logits)
+                            # logits_prob = self.sigmoid(logits)
+                            logits_prob = logits
                             if batch_idx == 0:
                                 labels_all = labels
                                 logits_prob_all = logits_prob
