@@ -118,6 +118,6 @@ class ResNet(nn.Module):
         # logger.debug(f"x shape: {x.shape}, ag shape: {ag.shape}")
         x = torch.cat((ag, x), dim=1)
         x = self.fc(x)
-        x = self.sig(x)
+        # x = self.sig(x)
 
         return x

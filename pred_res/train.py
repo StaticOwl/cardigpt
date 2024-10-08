@@ -14,11 +14,12 @@ import time
 import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 
 import model
 from dataset.ECGDataset import ECGDataset
-from utils.metrics import cal_acc
 from utils.freeze import set_freeze_by_id
+from utils.metrics import cal_acc
 
 
 class Trainer:
@@ -118,21 +119,23 @@ class Trainer:
         best_acc = 0.0
         batch_loss = 0.0
         step_start = time.time()
+        writer = SummaryWriter(log_dir="./logs")
 
         for epoch in range(self.start_epoch, args.max_epoch):
             logging.info('-' * 5 + 'Epoch {}/{}'.format(epoch, args.max_epoch - 1) + '-' * 5)
 
             if self.lr_scheduler is not None:
                 logging.info('current lr: {}'.format(self.lr_scheduler.get_last_lr()))
+                writer.add_scalar('Learning Rate', self.lr_scheduler.get_last_lr()[0], epoch)
             else:
                 logging.info('current lr: {}'.format(args.lr))
+                writer.add_scalar('Learning Rate', args.lr, epoch)
 
             # Each epoch has a training and val phase
             for phase in ['train', 'val']:
                 # Define the temp variable
                 epoch_start = time.time()
                 epoch_loss = 0.0
-                batch_length = 0
 
                 # Iterate over data.
                 if phase == 'train':
@@ -151,16 +154,42 @@ class Trainer:
                         if phase == 'train':
                             logits = self.model(inputs, ag)
                             logits_prob = self.sigmoid(logits)
-                            if batch_idx == 0:
-                                labels_all = labels
-                                logits_prob_all = logits_prob
-                            else:
-                                labels_all = torch.cat((labels_all, labels), dim=0)
-                                logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
+                            # if batch_idx == 0:
+                            #     labels_all = labels
+                            #     logits_prob_all = logits_prob
+                            # else:
+                            #     labels_all = torch.cat((labels_all, labels), dim=0)
+                            #     logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
 
                             loss = self.criterion(logits, labels)
                             loss_temp = loss.item() * inputs.size(0)
                             epoch_loss += loss_temp
+
+                            # backward + optimize only if in training phase
+                            self.optimizer.zero_grad()
+                            loss.backward()
+                            self.optimizer.step()
+
+                            batch_loss += loss_temp
+                            batch_count += inputs.size(0)
+
+                            if step % args.log_step == 0:
+                                batch_loss_avg = batch_loss / batch_count
+                                train_time = time.time() - step_start
+                                step_start = time.time()
+                                batch_time = train_time / args.log_step if step != 0 else train_time
+                                samples_per_sec = 1.0 * batch_count / train_time
+                                logging.info('Epoch: {} [{}/{}], Train Loss: {:.4f},'
+                                             '{:.1f} examples/sec {:.2f} sec/batch'.format(
+                                    epoch, batch_idx * len(inputs), len(self.dataloaders[phase].dataset),
+                                    batch_loss_avg, samples_per_sec, batch_time
+                                ))
+                                batch_loss = 0.0
+                                batch_count = 0
+                                writer.add_scalar('Train Loss', batch_loss_avg, step)
+
+                            step += 1
+
                         else:
                             val_length = inputs.shape[2]
                             win_length = args.win_length if args.win_length else 4096
@@ -190,54 +219,26 @@ class Trainer:
                                 logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
                             epoch_loss += loss_temp
 
-                    if phase == 'train':
-                        # backward + optimize only if in training phase
-                        self.optimizer.zero_grad()
-                        loss.backward()
-                        self.optimizer.step()
-
-                        batch_loss += loss_temp
-                        batch_count += inputs.size(0)
-                        batch_length += 1
-
-                        if step % args.log_step == 0:
-                            batch_loss = batch_loss / batch_count
-                            train_time = time.time() - step_start
-                            step_start = time.time()
-                            batch_time = train_time / args.log_step if step != 0 else train_time
-                            samples_per_sec = 1.0 * batch_count / train_time
-                            logging.info('Epoch: {} [{}/{}], Train Loss: {:.4f},'
-                                         '{:.1f} examples/sec {:.2f} sec/batch'.format(
-                                epoch, batch_idx * len(inputs), len(self.dataloaders[phase].dataset),
-                                batch_loss, samples_per_sec, batch_time
-                            ))
-                            batch_loss = 0.0
-                            batch_count = 0
-
-                        step += 1
-
                 metric = self.cal_acc(labels_all, logits_prob_all)
-
                 epoch_loss = epoch_loss / len(self.dataloaders[phase].dataset)
+
+                writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
+                writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-challenge_metric: {:.4f}, Cost {:.1f} sec'.
                              format(epoch, phase, epoch_loss, phase, metric, time.time() - epoch_start))
                 epoch_acc = metric
 
-                if phase == 'val':
+                if phase == 'val' and epoch_acc > best_acc:
                     model_state = self.model.module.state_dict() if self.device_count > 1 else self.model.state_dict()
-                    if epoch_acc > best_acc:
-                        best_acc = epoch_acc
-                        torch.save(model_state,
-                                   os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
+                    best_acc = epoch_acc
+                    torch.save(model_state,
+                               os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
 
             # Update the learning rate
             if self.lr_scheduler is not None:
                 self.lr_scheduler.step()
             else:
                 logging.info('current lr: {}'.format(args.lr))
-
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
 
     def nn_forward(self, inputs, ag, labels):
         logits = self.model(inputs, ag)
