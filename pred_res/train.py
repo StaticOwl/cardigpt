@@ -157,7 +157,7 @@ class Trainer:
                         # track history if only in train
                         if phase == 'train':
                             logits = self.model(inputs, ag)
-                            logits_prob = self.sigmoid(logits)
+                            # logits_prob = self.sigmoid(logits)
                             logits_prob = logits
                             if batch_idx == 0:
                                 labels_all = labels
