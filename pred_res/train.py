@@ -246,9 +246,9 @@ class Trainer:
                         self.epochs_since_improvement += 1
                         if self.early_stop and self.epochs_since_improvement > self.patience:
                             logging.info(f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
-                        writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
-                        writer.close()
-                        return
+                            writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
+                            writer.close()
+                            return
 
             # Update the learning rate
             if self.lr_scheduler is not None:
