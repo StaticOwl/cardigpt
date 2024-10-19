@@ -185,7 +185,8 @@ class Trainer:
                             loss.backward()
                             self.optimizer.step()
 
-                    epoch_loss += loss.item() * inputs.size(0)
+                    loss_temp = loss.item() * inputs.size(0)
+                    epoch_loss += loss_temp
 
                     batch_loss += loss_temp
                     batch_count += inputs.size(0)
