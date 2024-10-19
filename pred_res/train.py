@@ -47,7 +47,7 @@ class Trainer:
         self.device_count = None
         self.dataset = None
         self.args = args
-        self.model: model.ResNet = model.ResNet(block=None, num_blocks=None, **args)
+        self.model: model.ResNet = None
         self.optimizer = None
         self.criterion = None
         self.device = None
