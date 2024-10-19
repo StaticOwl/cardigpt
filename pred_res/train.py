@@ -18,6 +18,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 import model
 from dataset.ECGDataset import ECGDataset
+from utils.proto_loss import proto_loss
 from utils.freeze import set_freeze_by_id
 from utils.metrics import cal_acc
 
@@ -52,6 +53,7 @@ class Trainer:
         self.device = None
         self.start_epoch = 0
         self.cal_acc = cal_acc
+        self.lambda_pd = args.lambda_pd
 
     def setup(self):
         """
@@ -85,7 +87,12 @@ class Trainer:
         }
         self.num_classes = ECGDataset.num_classes
         model_name = getattr(model, args.model_name)
-        self.model = model_name(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes)
+        self.model = model_name(
+            pretrained=True,
+            in_channel=ECGDataset.input_channel,
+            out_channel=self.num_classes,
+            num_prototypes=args.num_prototypes
+        )
         if args.layers_num_last is not None:
             if args.layers_num_last != 0:
                 set_freeze_by_id(self.model, args.layers_num_last)
@@ -155,10 +162,17 @@ class Trainer:
                     with torch.set_grad_enabled(phase == 'train'):
                         # forward
                         # track history if only in train
+                        logits = self.model(inputs, ag)
+                        # logits_prob = self.sigmoid(logits)
+                        logits_prob = logits
+                        loss = self.criterion(logits, labels)
+
                         if phase == 'train':
-                            logits = self.model(inputs, ag)
-                            # logits_prob = self.sigmoid(logits)
-                            logits_prob = logits
+                            prototypes = self.model.prototype_layer
+                            loss_pd = self.lambda_pd * proto_loss(prototypes)
+                            loss += loss_pd
+
+                        if phase == 'train':
                             if batch_idx == 0:
                                 labels_all = labels
                                 logits_prob_all = logits_prob
@@ -166,63 +180,62 @@ class Trainer:
                                 labels_all = torch.cat((labels_all, labels), dim=0)
                                 logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
 
-                            loss = self.criterion(logits, labels)
-                            loss_temp = loss.item() * inputs.size(0)
-                            epoch_loss += loss_temp
-
-                            # backward + optimize only if in training phase
+                        if phase == 'train':
                             self.optimizer.zero_grad()
                             loss.backward()
                             self.optimizer.step()
 
-                            batch_loss += loss_temp
-                            batch_count += inputs.size(0)
+                    epoch_loss += loss.item() * inputs.size(0)
 
-                            if step % args.log_step == 0:
-                                batch_loss_avg = batch_loss / batch_count
-                                train_time = time.time() - step_start
-                                step_start = time.time()
-                                batch_time = train_time / args.log_step if step != 0 else train_time
-                                samples_per_sec = 1.0 * batch_count / train_time
-                                logging.info('Epoch: {} [{}/{}], Train Loss: {:.4f},'
-                                             'samples/sec: {:.1f} examples/sec, time: {:.2f} sec/batch'.format(
-                                    epoch, batch_idx * len(inputs), len(self.dataloaders[phase].dataset),
-                                    batch_loss_avg, samples_per_sec, batch_time
-                                ))
-                                batch_loss = 0.0
-                                batch_count = 0
-                                writer.add_scalar('Train Loss', batch_loss_avg, step)
+                    batch_loss += loss_temp
+                    batch_count += inputs.size(0)
 
-                            step += 1
+                    if step % args.log_step == 0:
+                        batch_loss_avg = batch_loss / batch_count
+                        train_time = time.time() - step_start
+                        step_start = time.time()
+                        batch_time = train_time / args.log_step if step != 0 else train_time
+                        samples_per_sec = 1.0 * batch_count / train_time
+                        logging.info('Epoch: {} [{}/{}], Train Loss: {:.4f},'
+                                     'samples/sec: {:.1f} examples/sec, time: {:.2f} sec/batch'.format(
+                            epoch, batch_idx * len(inputs), len(self.dataloaders[phase].dataset),
+                            batch_loss_avg, samples_per_sec, batch_time
+                        ))
+                    step += 1
 
+                batch_loss = 0.0
+                batch_count = 0
+                epoch_loss /= len(self.dataloaders[phase].dataset)
+                writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
+
+                if phase == 'val':
+                    val_length = inputs.shape[2]
+                    win_length = args.win_length if args.win_length else 4096
+                    overlap = args.overlap if args.overlap else 256
+                    patch_number = math.ceil(abs(val_length - win_length) / (win_length - overlap)) + 1
+                    if patch_number > 1:
+                        start = int((val_length - win_length) / (patch_number - 1))
+                    for i in range(patch_number):
+                        if i == 0:
+                            logits_prob, loss_temp = self.nn_forward(inputs[:, :, 0: val_length], ag, labels)
+                        elif i == patch_number - 1:
+                            logits_prob_tmp, loss_temp_tmp = self.nn_forward(
+                                inputs[:, :, val_length - win_length: val_length], ag, labels)
+                            logits_prob = (logits_prob + logits_prob_tmp) / patch_number
+                            loss_temp = (loss_temp + loss_temp_tmp) / patch_number
                         else:
-                            val_length = inputs.shape[2]
-                            win_length = args.win_length if args.win_length else 4096
-                            overlap = args.overlap if args.overlap else 256
-                            patch_number = math.ceil(abs(val_length - win_length) / (win_length - overlap)) + 1
-                            if patch_number > 1:
-                                start = int((val_length - win_length) / (patch_number - 1))
-                            for i in range(patch_number):
-                                if i == 0:
-                                    logits_prob, loss_temp = self.nn_forward(inputs[:, :, 0: val_length], ag, labels)
-                                elif i == patch_number - 1:
-                                    logits_prob_tmp, loss_temp_tmp = self.nn_forward(
-                                        inputs[:, :, val_length - win_length: val_length], ag, labels)
-                                    logits_prob = (logits_prob + logits_prob_tmp) / patch_number
-                                    loss_temp = (loss_temp + loss_temp_tmp) / patch_number
-                                else:
-                                    logits_prob_tmp, loss_temp_tmp = self.nn_forward(
-                                        inputs[:, :, i * start:i * start + win_length], ag, labels)
-                                    logits_prob += logits_prob_tmp
-                                    loss_temp += loss_temp_tmp
+                            logits_prob_tmp, loss_temp_tmp = self.nn_forward(
+                                inputs[:, :, i * start:i * start + win_length], ag, labels)
+                            logits_prob += logits_prob_tmp
+                            loss_temp += loss_temp_tmp
 
-                            if batch_idx == 0:
-                                labels_all = labels
-                                logits_prob_all = logits_prob
-                            else:
-                                labels_all = torch.cat((labels_all, labels), dim=0)
-                                logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
-                            epoch_loss += loss_temp
+                    if batch_idx == 0:
+                        labels_all = labels
+                        logits_prob_all = logits_prob
+                    else:
+                        labels_all = torch.cat((labels_all, labels), dim=0)
+                        logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
+                    epoch_loss += loss_temp
 
                 metric = self.cal_acc(labels_all, logits_prob_all)
                 epoch_loss = epoch_loss / len(self.dataloaders[phase].dataset)
@@ -245,7 +258,8 @@ class Trainer:
                     else:
                         self.epochs_since_improvement += 1
                         if self.early_stop and self.epochs_since_improvement > self.patience:
-                            logging.info(f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
+                            logging.info(
+                                f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
                             writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                             writer.close()
                             return
