@@ -168,7 +168,7 @@ class Trainer:
                         loss = self.criterion(logits, labels)
 
                         if phase == 'train':
-                            prototypes = self.model.module.prototype_layer
+                            prototypes = self.model.prototype_layer
                             loss_pd = self.lambda_pd * proto_loss(prototypes)
                             loss += loss_pd
 
