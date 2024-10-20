@@ -20,6 +20,7 @@ import model
 from dataset.ECGDataset import ECGDataset
 from utils.freeze import set_freeze_by_id
 from utils.metrics import cal_acc
+from utils.proto_loss import proto_loss
 
 
 class Trainer:
@@ -52,6 +53,7 @@ class Trainer:
         self.device = None
         self.start_epoch = 0
         self.cal_acc = cal_acc
+        self.lambda_pd = args.lambda_pd
 
     def setup(self):
         """
@@ -85,7 +87,8 @@ class Trainer:
         }
         self.num_classes = ECGDataset.num_classes
         model_name = getattr(model, args.model_name)
-        self.model = model_name(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes)
+        self.model = model_name(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes,
+                                num_prototypes=args.num_prototypes)
         if args.layers_num_last is not None:
             if args.layers_num_last != 0:
                 set_freeze_by_id(self.model, args.layers_num_last)
@@ -167,6 +170,11 @@ class Trainer:
                                 logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
 
                             loss = self.criterion(logits, labels)
+                            prototypes = self.model.module.prototype_layer if self.device_count > 1 else self.model.prototype_layer
+                            loss_pd = self.lambda_pd * proto_loss(prototypes)
+
+                            loss = loss + loss_pd
+
                             loss_temp = loss.item() * inputs.size(0)
                             epoch_loss += loss_temp
 
@@ -245,7 +253,8 @@ class Trainer:
                     else:
                         self.epochs_since_improvement += 1
                         if self.early_stop and self.epochs_since_improvement > self.patience:
-                            logging.info(f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
+                            logging.info(
+                                f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
                             writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                             writer.close()
                             return

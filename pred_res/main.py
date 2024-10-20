@@ -39,6 +39,9 @@ def parse_args():
     parser.add_argument('--model_name', type=str, default='resnet', help='the name of the model')
     parser.add_argument('--patience', type=int, default=40, help='the patience for early stop')
     parser.add_argument('--min_delta', type=float, default=0.0001, help='the min delta for early stop')
+    parser.add_argument('--lambda_pd', type=float, default=1.0, help='Weight for Prototype Diversity Loss')
+    parser.add_argument('--num_prototypes', type=int, default=10, help='Number of Prototypes')
+
 
     return parser.parse_args()
 
