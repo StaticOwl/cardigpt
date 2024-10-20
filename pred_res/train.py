@@ -170,10 +170,12 @@ class Trainer:
                                 logits_prob_all = torch.cat((logits_prob_all, logits_prob), dim=0)
 
                             loss = self.criterion(logits, labels)
-                            prototypes = self.model.module.prototype_layer if self.device_count > 1 else self.model.prototype_layer
-                            loss_pd = self.lambda_pd * proto_loss(prototypes)
 
-                            loss = loss + loss_pd
+                            if args.prototype:
+                                prototypes = self.model.module.prototype_layer if self.device_count > 1 else self.model.prototype_layer
+                                loss_pd = self.lambda_pd * proto_loss(prototypes)
+
+                                loss = loss + loss_pd
 
                             loss_temp = loss.item() * inputs.size(0)
                             epoch_loss += loss_temp
