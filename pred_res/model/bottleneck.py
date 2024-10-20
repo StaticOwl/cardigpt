@@ -13,15 +13,15 @@ from .util import conv1x1, conv7x1
 
 class BottleNeck(nn.Module):
     """ResNet bottleneck block."""
-    expansion = 2
+    expansion = 4
 
     def __init__(self, in_planes, out_planes, stride=1, downsample=None):
         super(BottleNeck, self).__init__()
-        self.conv1 = conv7x1(in_planes, out_planes, stride)
+        self.conv1 = conv1x1(in_planes, out_planes, stride)
         self.bn1 = nn.BatchNorm1d(out_planes)
         self.conv2 = conv7x1(out_planes, out_planes, stride=stride)
         self.bn2 = nn.BatchNorm1d(out_planes)
-        self.conv3 = conv7x1(out_planes, out_planes * self.expansion, stride=1)
+        self.conv3 = conv1x1(out_planes, out_planes * self.expansion)
         self.bn3 = nn.BatchNorm1d(out_planes * self.expansion)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
