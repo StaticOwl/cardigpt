@@ -22,7 +22,7 @@ class ResNet(nn.Module):
     SEResNet1D model definition
     """
 
-    def __init__(self, block, num_blocks, in_channel=1, out_channel=10, num_prototypes=10, ze=False):
+    def __init__(self, block, num_blocks, in_channel=1, out_channel=10, num_prototypes=10, prototype=False, ze=False):
         """
         :param block: block type (BasicBlock or BottleNeck)
         :param num_blocks: number of blocks in each layer
@@ -48,6 +48,7 @@ class ResNet(nn.Module):
         # Prototypes Layer init randomly for now
         self.prototype_layer = nn.Parameter(torch.randn(num_prototypes, 512 * block.expansion))
         self.prototype_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
+        self.prototype = prototype
         self.small_fc = nn.Linear(5, 10)
         self.fc = nn.Linear(512 * block.expansion + 10, out_channel)
         self.sig = nn.Sigmoid()
@@ -119,8 +120,11 @@ class ResNet(nn.Module):
         x = x.view(x.size(0), -1)
         ag = self.small_fc(ag)
         # logger.debug(f"x shape: {x.shape}, ag shape: {ag.shape}")
-        similarity = self.prototype_sim(x.unsqueeze(1), self.prototype_layer.unsqueeze(0))
-        x = torch.cat((ag, similarity), dim=1)
+        if self.prototype:
+            similarity = self.prototype_sim(x.unsqueeze(1), self.prototype_layer.unsqueeze(0))
+            x = torch.cat((ag, similarity), dim=1)
+        else:
+            x = torch.cat((ag, x), dim=1)
         x = self.fc(x)
         # x = self.sig(x)
 

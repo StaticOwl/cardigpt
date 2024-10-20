@@ -88,7 +88,7 @@ class Trainer:
         self.num_classes = ECGDataset.num_classes
         model_name = getattr(model, args.model_name)
         self.model = model_name(pretrained=True, in_channel=ECGDataset.input_channel, out_channel=self.num_classes,
-                                num_prototypes=args.num_prototypes)
+                                num_prototypes=args.num_prototypes, prototype=args.prototype)
         if args.layers_num_last is not None:
             if args.layers_num_last != 0:
                 set_freeze_by_id(self.model, args.layers_num_last)

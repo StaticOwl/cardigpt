@@ -5,11 +5,12 @@ Date: 03/10/2024
 Description: Main Driver Code
 """
 
-import os, json, argparse
-from logging_config import setup_logging
-
+import argparse
+import json
 import logging
+import os
 
+from logging_config import setup_logging
 from train import Trainer
 from utils.datasplit import read_and_split_data
 from utils.downloader import kaggle_data_downloader
@@ -22,7 +23,8 @@ def parse_args():
     parser.add_argument('--download', action='store_true')
     parser.add_argument('--early_stop', action='store_true')
     parser.add_argument('--prepare_train', action='store_true')
-    parser.add_argument('--save_dir', type=str, default='./trained_model', help='the directory to save latest trained model')
+    parser.add_argument('--save_dir', type=str, default='./trained_model',
+                        help='the directory to save latest trained model')
     parser.add_argument('--split', type=str, default='0', help='The number of split')
     parser.add_argument('--data_dir', type=str, default='./data', help='the directory of the data')
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
@@ -41,7 +43,7 @@ def parse_args():
     parser.add_argument('--min_delta', type=float, default=0.0001, help='the min delta for early stop')
     parser.add_argument('--lambda_pd', type=float, default=1.0, help='Weight for Prototype Diversity Loss')
     parser.add_argument('--num_prototypes', type=int, default=10, help='Number of Prototypes')
-
+    parser.add_argument('--prototype', action='store_true')
 
     return parser.parse_args()
 
@@ -61,5 +63,3 @@ if __name__ == '__main__':
     trainer = Trainer(args)
     trainer.setup()
     trainer.train()
-
-
