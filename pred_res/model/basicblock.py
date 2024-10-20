@@ -28,7 +28,7 @@ class BasicBlock(nn.Module):
 
         self.fc = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(out_planes, out_planes, 1)
+            nn.Conv2d(out_planes*2, out_planes, 1)
         )
 
     def forward(self, x):
