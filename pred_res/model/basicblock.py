@@ -5,6 +5,7 @@ Author: malli
 Created: 04-10-2024
 Description: Basic building block for ResNet models.
 """
+import torch
 from torch import nn
 
 from .selayer import SELayer
@@ -25,17 +26,27 @@ class BasicBlock(nn.Module):
         self.stride = stride
         self.dropout = nn.Dropout(.2)
 
+        self.fc = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(out_planes, out_planes, 1)
+        )
+
     def forward(self, x):
         residual = x
 
-        out = self.conv1(x)
-        out = self.bn(out)
-        out = self.relu(out)
+        out1 = self.conv1(x)
+        out1 = self.bn(out1)
+        out1 = self.relu(out1)
+        out1 = self.dropout(out1)
 
-        out = self.conv2(out)
-        out = self.bn(out)
-        out = self.relu(out)
-        out = self.dropout(out)
+        out2 = self.conv1(x)
+        out2 = self.bn(out2)
+        out2 = self.relu(out2)
+        out2 = self.dropout(out2)
+
+        attention = torch.sigmoid(self.fc(torch.cat((out1, out2), dim=1)))
+
+        out = attention * out1 + (1 - attention) * out2
 
         out = self.conv2(out)
         out = self.bn(out)
