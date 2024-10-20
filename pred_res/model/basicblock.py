@@ -42,14 +42,14 @@ class BasicBlock(nn.Module):
         out2 = self.conv1(x)
         out2 = self.bn(out2)
         out2 = self.relu(out2)
-        out2 = self.dropout(out2)
+        # out2 = self.dropout(out2)
 
         attention = torch.sigmoid(self.fc(torch.cat((out1, out2), dim=1)))
 
         out = attention * out1 + (1 - attention) * out2
 
-        out = self.conv2(out)
-        out = self.bn(out)
+        # out = self.conv2(out)
+        # out = self.bn(out)
         out = self.se(out)
 
         if self.downsample is not None:
