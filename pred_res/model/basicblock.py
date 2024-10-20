@@ -24,7 +24,7 @@ class BasicBlock(nn.Module):
         self.se = SELayer(out_planes)
         self.downsample = downsample
         self.stride = stride
-        self.dropout = nn.Dropout(torch.rand(1).item())
+        self.dropout = nn.Dropout(0.2)
 
         self.fc = nn.Sequential(
             nn.AdaptiveAvgPool1d(1),
