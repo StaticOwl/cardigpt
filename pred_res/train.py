@@ -239,7 +239,7 @@ class Trainer:
 
                 writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                 writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
-                logging.info('Epoch: {} {}-Loss: {:.4f} {}-challenge_metric: {:.4f}, Cost {:.1f} sec'.
+                logging.info('Epoch: {} {}-Loss: {:.4f} {}-metric: {:.4f}, Cost {:.1f} sec'.
                              format(epoch, phase, epoch_loss, phase, metric, time.time() - epoch_start))
 
                 if phase == 'val':
@@ -270,7 +270,9 @@ class Trainer:
         writer.close()
 
     def nn_forward(self, inputs, ag, labels):
-        logits = self.model(inputs, ag)
-        logits_prob = self.sigmoid(logits)
-        tmp_loss = self.criterion(logits, labels).item() * inputs.size(0)
+        with torch.no_grad():
+            logits = self.model(inputs, ag)
+            logits_prob = self.sigmoid(logits)
+            tmp_loss = self.criterion(logits, labels).item() * inputs.size(0)
+
         return logits_prob, tmp_loss
