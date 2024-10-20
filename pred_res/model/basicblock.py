@@ -27,7 +27,7 @@ class BasicBlock(nn.Module):
         self.dropout = nn.Dropout(.2)
 
         self.fc = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
+            nn.AdaptiveAvgPool1d(1),
             nn.Conv1d(out_planes * 2, out_planes, 1)
         )
 
