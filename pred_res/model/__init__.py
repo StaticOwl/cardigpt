@@ -18,8 +18,8 @@ def resnet(pretrained=False, **kwargs):
     return model
 
 
-def resnet_prototypes(pretrained=False, **kwargs):
-    model = ResNet(block=BasicBlock, num_blocks=[3, 4, 6, 3], **kwargs)
+def resnet_custom(pretrained=False, **kwargs):
+    model = ResNet(block=BasicBlock, num_blocks=[2, 2, 2, 2], **kwargs)
     if pretrained:
         model.load_state_dict(torch.load('./model_repo/prev_model.pth', weights_only=True), strict=False)
     return model
