@@ -13,7 +13,7 @@ from .util import conv1x1, conv7x1
 
 class BottleNeck(nn.Module):
     """ResNet bottleneck block."""
-    expansion = 1
+    expansion = 2
 
     def __init__(self, in_planes, out_planes, stride=1, downsample=None):
         super(BottleNeck, self).__init__()
