@@ -38,7 +38,7 @@ class BasicBlock(nn.Module):
         out = self.dropout(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
+        out = self.bn(out)
         out = self.se(out)
 
         if self.downsample is not None:
