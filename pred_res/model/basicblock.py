@@ -17,10 +17,9 @@ class BasicBlock(nn.Module):
     def __init__(self, in_planes, out_planes, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
         self.conv1 = conv7x1(in_planes, out_planes, stride=stride)
-        self.bn1 = nn.BatchNorm1d(out_planes)
+        self.bn = nn.BatchNorm1d(out_planes)
         self.relu = nn.ReLU(inplace=True)
         self.conv2 = conv7x1(out_planes, out_planes, stride=1)
-        self.bn2 = nn.BatchNorm1d(out_planes)
         self.se = SELayer(out_planes)
         self.downsample = downsample
         self.stride = stride
@@ -30,11 +29,11 @@ class BasicBlock(nn.Module):
         residual = x
 
         out = self.conv1(x)
-        out = self.bn1(out)
+        out = self.bn(out)
         out = self.relu(out)
 
-        out = self.conv1(out)
-        out = self.bn1(out)
+        out = self.conv2(out)
+        out = self.bn(out)
         out = self.relu(out)
         out = self.dropout(out)
 
