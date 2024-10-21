@@ -184,7 +184,6 @@ def load_test_data(filename):
 
 
 def test(run_args):
-    model_input = run_args.test_model_path
     test_dir = './input_data/test/'
     output_dir = './results/'
 
