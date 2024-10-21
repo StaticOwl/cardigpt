@@ -188,6 +188,12 @@ def test(run_args):
     test_dir = './input_data/test/'
     output_dir = './results/'
 
+    # get the last file chronologically
+    list_of_files = [os.path.join(run_args.test_model_path, f) for f in os.listdir(run_args.test_model_path) if
+                     os.path.isfile(os.path.join(run_args.test_model_path, f))]
+    model_input = max(list_of_files, key=os.path.getctime)
+    logger.info("Latest model path: {}".format(model_input))
+
     input_files = []
     for f in os.listdir(test_dir):
         if os.path.isfile(os.path.join(test_dir, f)) and not f.lower().startswith('.') and f.lower().endswith('mat'):
