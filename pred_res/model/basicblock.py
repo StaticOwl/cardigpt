@@ -24,8 +24,12 @@ class BasicBlock(nn.Module):
         self.se = SELayer(out_planes)
         self.downsample = downsample
         self.stride = stride
-        self.dropout = nn.Dropout(torch.rand(1).item())
-        self.alpha = nn.Parameter(torch.tensor(0.5), requires_grad=True)
+        self.dropout = nn.Dropout(0.2)
+
+        self.fc = nn.Sequential(
+            nn.AdaptiveAvgPool1d(1),
+            nn.Conv1d(out_planes * 2, out_planes, 1)
+        )
 
     def forward(self, x):
         residual = x
@@ -33,15 +37,18 @@ class BasicBlock(nn.Module):
         out1 = self.conv1(x)
         out1 = self.bn(out1)
         out1 = self.relu(out1)
-        out1 = self.dropout(out1)
 
         out2 = self.conv1(x)
         out2 = self.bn(out2)
         out2 = self.relu(out2)
 
-        alpha = torch.sigmoid(self.alpha)
-        out = alpha * out1 + (1 - alpha) * out2
+        attention = torch.sigmoid(self.fc(torch.cat((out1, out2), dim=1)))
 
+        out = attention * out1 + (1 - attention) * out2
+
+        # out = self.conv2(out)
+        # out = self.bn(out)
+        out = self.dropout(out)
         out = self.se(out)
 
         if self.downsample is not None:
