@@ -137,6 +137,7 @@ def load_model(model_input, model_base):
     accuracy = np.array([float(i.split('-')[-2]) for i in model_list])
     logger.info("Model Accuracy: {}".format(accuracy))
     resumes = [model_list[int(np.argmax(accuracy))]]
+    logger.info("Model Path: {}".format(resumes))
     model_all = []
 
     for resume in resumes:
