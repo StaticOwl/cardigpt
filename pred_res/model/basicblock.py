@@ -46,8 +46,6 @@ class BasicBlock(nn.Module):
 
         out = attention * out1 + (1 - attention) * out2
 
-        # out = self.conv2(out)
-        # out = self.bn(out)
         out = self.dropout(out)
         out = self.se(out)
 

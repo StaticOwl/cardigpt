@@ -1,7 +1,6 @@
 import logging
 
 import torch
-from torch.utils import model_zoo
 
 from .basicblock import BasicBlock
 from .bottleneck import BottleNeck
@@ -13,6 +12,7 @@ __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
 
 prev_model = torch.load('./model_repo/prev_model.pth', weights_only=True)
+
 
 def resnet(pretrained=False, **kwargs):
     model = ResNet(block=BasicBlock, num_blocks=[2, 2, 2, 2], **kwargs)

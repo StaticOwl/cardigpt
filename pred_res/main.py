@@ -11,6 +11,7 @@ import logging
 import os
 
 from logging_config import setup_logging
+from pred_res import test
 from train import Trainer
 from utils.datasplit import read_and_split_data
 from utils.downloader import kaggle_data_downloader
@@ -20,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--type', type=str, choices=['train', 'test', 'predict'], help='train or test')
+    parser.add_argument('--test_model_path', type=str, default='./trained_model/', help='the path of the model to be tested')
     parser.add_argument('--download', action='store_true')
     parser.add_argument('--early_stop', action='store_true')
     parser.add_argument('--prepare_train', action='store_true')
@@ -48,18 +51,33 @@ def parse_args():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+def train_main(run_args):
     setup_logging()
-    args = parse_args()
     with open(os.path.join(os.path.dirname(__file__), 'datadict.json')) as f:
         datadict = json.load(f)
-    kaggle_data_downloader(datadict, args.download)
-    if args.download or args.prepare_train:
+    kaggle_data_downloader(datadict, run_args.download)
+    if run_args.download or run_args.prepare_train:
         read_and_split_data('./input_data/train/')
 
-    for k, v in args.__dict__.items():
+    for k, v in run_args.__dict__.items():
         logger.info("{}: {}".format(k, v))
 
-    trainer = Trainer(args)
+    trainer = Trainer(run_args)
     trainer.setup()
     trainer.train()
+
+
+def test_main(run_args):
+    setup_logging()
+    test.test(run_args)
+
+
+if __name__ == '__main__':
+    args = parse_args()
+
+    if args.type == 'train':
+        train_main(args)
+    elif args.type == 'test':
+        test_main(args)
+    elif args.type == 'predict':
+        raise NotImplementedError('predict is not implemented yet')
