@@ -135,6 +135,7 @@ def load_model(model_input, model_base):
     # load the model from disk
     model_list = ls_dir(rootdir=model_input, suffix=".pth")
     accuracy = np.array([float(i.split('-')[-2]) for i in model_list])
+    logger.info("Model Accuracy: {}".format(accuracy))
     resumes = [model_list[int(np.argmax(accuracy))]]
     model_all = []
 
@@ -184,14 +185,9 @@ def load_test_data(filename):
 
 
 def test(run_args):
+    model_input = run_args.test_model_path
     test_dir = './input_data/test/'
     output_dir = './results/'
-
-    # get the last file chronologically
-    list_of_files = [os.path.join(run_args.test_model_path, f) for f in os.listdir(run_args.test_model_path) if
-                     os.path.isfile(os.path.join(run_args.test_model_path, f))]
-    model_input = max(list_of_files, key=os.path.getctime)
-    logger.info("Latest model path: {}".format(model_input))
 
     input_files = []
     for f in os.listdir(test_dir):
