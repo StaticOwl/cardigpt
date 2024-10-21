@@ -11,7 +11,7 @@ import logging
 import os
 
 from logging_config import setup_logging
-from pred_res import test
+from tester import test
 from train import Trainer
 from utils.datasplit import read_and_split_data
 from utils.downloader import kaggle_data_downloader
@@ -69,7 +69,7 @@ def train_main(run_args):
 
 def test_main(run_args):
     setup_logging()
-    test.test(run_args)
+    test(run_args)
 
 
 if __name__ == '__main__':
