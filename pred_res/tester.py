@@ -16,9 +16,9 @@ import torch
 from scipy.io import loadmat
 from torch import nn
 
-from pred_res import model
-from pred_res.dataset.ECGData import resample, prepare_data
-from pred_res.utils.datasplit import ls_dir
+import model
+from dataset.ECGData import resample, prepare_data
+from utils.datasplit import ls_dir
 
 logger = logging.getLogger(__name__)
 
