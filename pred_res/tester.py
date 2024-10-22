@@ -146,9 +146,9 @@ def load_model(model_input, model_base):
         if torch.cuda.is_available():
             if device_count > 1:
                 model_name = torch.nn.DataParallel(model_name)
-            model_name.load_state_dict(torch.load(resume))
+            model_name.load_state_dict(torch.load(resume, weights_only=True))
         else:
-            model_name.load_state_dict(torch.load(resume, map_location=device))
+            model_name.load_state_dict(torch.load(resume, weights_only=True, map_location=device))
 
         model_name.to(device)
         model_name.eval()
