@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
 
-prev_model = torch.load('./model_repo/prev_model.pth', weights_only=True)
+prev_model = torch.load('./model_repo/14-0.5524.pth', weights_only=True)
 
 
 def resnet(pretrained=False, **kwargs):

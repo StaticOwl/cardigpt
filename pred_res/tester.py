@@ -132,12 +132,15 @@ def run_classifier(data, header_data, model_name):
     return current_label, current_score, classes
 
 
-def load_model(model_input, model_base):
+def load_model(model_input, model_base, test_model=None):
     # load the model from disk
     model_list = ls_dir(rootdir=model_input, suffix=".pth")
-    accuracy = np.array([float(i.split('-')[-2]) for i in model_list])
-    logger.info("Model Accuracy: {}".format(accuracy))
-    resumes = [model_list[int(np.argmax(accuracy))]]
+    if test_model is None:
+        accuracy = np.array([float(i.split('-')[-2]) for i in model_list])
+        logger.info("Model Accuracy: {}".format(accuracy))
+        resumes = [model_list[int(np.argmax(accuracy))]]
+    else:
+        resumes = [model_list[int(test_model)]]
     logger.info("Model Path: {}".format(resumes))
     model_all = []
 
@@ -185,7 +188,7 @@ def test(run_args):
         os.mkdir(output_dir)
 
     logger.info("Test model path: {}".format(model_input))
-    model_all = load_model(model_input, run_args.model_name)
+    model_all = load_model(model_input, run_args.model_name, run_args.test_model_name)
     num_files = len(input_files)
 
     df_pred = None
