@@ -135,6 +135,8 @@ def run_classifier(data, header_data, model_name):
 def load_model(model_input, model_base, test_model=None):
     # load the model from disk
     model_list = ls_dir(rootdir=model_input, suffix=".pth")
+
+    logger.info("Model List: {}".format(model_list))
     if test_model is None:
         accuracy = np.array([float(i.split('-')[-2]) for i in model_list])
         logger.info("Model Accuracy: {}".format(accuracy))
