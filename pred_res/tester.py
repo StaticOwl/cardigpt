@@ -140,7 +140,11 @@ def load_model(model_input, model_base, test_model=None):
         logger.info("Model Accuracy: {}".format(accuracy))
         resumes = [model_list[int(np.argmax(accuracy))]]
     else:
-        resumes = [model_list[int(test_model)]]
+        if test_model in model_list:
+            resumes = [test_model]
+        else:
+            logger.error(f"Model {test_model} not found in the model list.")
+            resumes = []
     logger.info("Model Path: {}".format(resumes))
     model_all = []
 
