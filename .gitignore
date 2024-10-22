@@ -2,3 +2,8 @@ files/
 pred_res/input_data/
 upload/
 pred_res/model/comb.py
+**/__pycache__/
+pred_res/data_split/
+**/logs/
+**/model_zoo/
+**/nohup.out
