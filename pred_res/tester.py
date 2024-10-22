@@ -158,21 +158,6 @@ def load_model(model_input, model_base):
     return model_all
 
 
-def save_predictions(output_directory, filename, scores, labels, classes):
-    recording = os.path.splitext(filename)[0]
-    new_file = filename.replace('.mat', '.csv')
-    output_file = os.path.join(output_directory, new_file)
-
-    # Include the filename as the recording number
-    recording_string = '#{}'.format(recording)
-    class_string = ','.join(classes)
-    label_string = ','.join(str(i) for i in labels)
-    score_string = ','.join(str(i) for i in scores)
-
-    with open(output_file, 'w') as f:
-        f.write(recording_string + '\n' + class_string + '\n' + label_string + '\n' + score_string + '\n')
-
-
 def load_test_data(filename):
     x = loadmat(filename)
     data = np.asarray(x['val'], dtype=np.float64)
@@ -210,7 +195,6 @@ def test(run_args):
         tmp_input_file = os.path.join(test_dir, f)
         data, header_data = load_test_data(tmp_input_file)
         label, score, classes = run_classifier(data, header_data, model_all)
-        save_predictions(output_dir, f, score, label, classes)
         if df_pred is None:
             columns = ['filename'] + ['{}_label'.format(c) for c in classes] + ['{}_score'.format(c) for c in classes]
             df_pred = pd.DataFrame(columns=columns)
