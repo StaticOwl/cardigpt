@@ -1,9 +1,9 @@
 """
-File: tester.py.py
+File: tester.py
 Project: potluck
 Author: staticowl
 Created: 21-10-2024
-Description: write_a_description
+Description: This module contains functions for processing ECG data, running classifiers, loading models, and testing models.
 """
 import logging
 import math
@@ -33,7 +33,16 @@ else:
 
 def processing_data(data, win_length, src_fs, tar_fs):
     """
-    Add any preprocessing at here
+    Preprocesses ECG data for classification.
+
+    Args:
+        data (numpy.ndarray): Raw ECG data.
+        win_length (int): Window length for processing.
+        src_fs (int): Source sampling frequency.
+        tar_fs (int): Target sampling frequency.
+
+    Returns:
+        torch.Tensor: Processed ECG data as a tensor.
     """
     data = resample(data, src_fs, tar_fs)
     num = data.shape[1]
@@ -48,6 +57,15 @@ def processing_data(data, win_length, src_fs, tar_fs):
 
 
 def read_ag(header_data):
+    """
+    Reads the age and gender information from ECG header data.
+
+    Args:
+        header_data (list): List of lines from the ECG header.
+
+    Returns:
+        torch.Tensor: Processed age and gender data as a tensor.
+    """
     for lines in header_data:
         if lines.startswith('#Age'):
             tmp = lines.split(': ')[1].strip()
@@ -68,6 +86,17 @@ def read_ag(header_data):
 
 
 def run_classifier(data, header_data, model_name):
+    """
+    Runs the classifier on the ECG data.
+
+    Args:
+        data (numpy.ndarray): ECG data.
+        header_data (list): List of lines from the ECG header.
+        model_name (torch.nn.Module): Trained model for classification.
+
+    Returns:
+        tuple: Predicted labels, scores, and classes.
+    """
     A = np.load('./magic_weight.npz')
     threshold = A['arr_0']
     num_classes = 24
@@ -82,7 +111,6 @@ def run_classifier(data, header_data, model_name):
     m = nn.Sigmoid()
     data = processing_data(data, win_length, src_fs, tar_fs)
     inputs = data.to(device)
-    # Use your classifier here to obtain a label and score for each class.
 
     val_length = inputs.shape[2]
     overlap = 256
@@ -133,7 +161,17 @@ def run_classifier(data, header_data, model_name):
 
 
 def load_model(model_input, model_base, test_model=None):
-    # load the model from disk
+    """
+    Loads the trained model for classification.
+
+    Args:
+        model_input (str): Path to the model directory.
+        model_base (str): Base model name.
+        test_model (str, optional): Name of the model to test. Defaults to None.
+
+    Returns:
+        list: List of loaded model instances.
+    """
     model_list = ls_dir(rootdir=model_input, suffix=".pth")
 
     logger.info("Model List: {}".format(model_list))
@@ -147,6 +185,7 @@ def load_model(model_input, model_base, test_model=None):
         else:
             logger.error(f"Model {test_model} not found in the model list.")
             resumes = []
+
     logger.info("Model Path: {}".format(resumes))
     model_all = []
 
@@ -168,6 +207,15 @@ def load_model(model_input, model_base, test_model=None):
 
 
 def load_test_data(filename):
+    """
+    Loads the ECG test data from a file.
+
+    Args:
+        filename (str): Path to the ECG test data file.
+
+    Returns:
+        tuple: ECG data and header information.
+    """
     x = loadmat(filename)
     data = np.asarray(x['val'], dtype=np.float64)
 
@@ -181,6 +229,12 @@ def load_test_data(filename):
 
 
 def test(run_args):
+    """
+    Performs testing on the loaded model using ECG test data.
+
+    Args:
+        run_args: Arguments for running the test.
+    """
     model_input = run_args.test_model_path
     test_dir = './input_data/test/'
     output_dir = './results/'

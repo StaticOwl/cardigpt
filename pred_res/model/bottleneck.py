@@ -3,7 +3,7 @@ File: bottleneck.py
 Project: potluck
 Author: malli
 Created: 04-10-2024
-Description: ResNet bottleneck block
+Description: Experimental ResNet bottleneck block
 """
 from torch import nn
 
@@ -12,7 +12,28 @@ from .util import conv1x1, conv7x1
 
 
 class BottleNeck(nn.Module):
-    """ResNet bottleneck block."""
+    """Experimental ResNet bottleneck block.
+
+    The block is composed of two convolutional layers with a ReLU activation
+    function, followed by a convolutional layer with a linear activation
+    function. The output of the block is the sum of the input and the output of
+    the last convolutional layer.
+
+    Attributes:
+        expansion (int): The expansion factor for the number of channels in the
+            output of the block. Defaults to 4.
+        conv1 (nn.Conv1d): The first convolutional layer.
+        bn1 (nn.BatchNorm1d): The first batch normalization layer.
+        conv2 (nn.Conv1d): The second convolutional layer.
+        bn2 (nn.BatchNorm1d): The second batch normalization layer.
+        conv3 (nn.Conv1d): The third convolutional layer.
+        bn3 (nn.BatchNorm1d): The third batch normalization layer.
+        relu (nn.ReLU): The ReLU activation function.
+        downsample (nn.Module or None): The downsample module. Defaults to None.
+        stride (int): The stride of the convolutional layers. Defaults to 1.
+        se (SELayer): The squeeze-and-excitation layer.
+        dropout (nn.Dropout): The dropout layer.
+    """
     expansion = 4
 
     def __init__(self, in_planes, out_planes, stride=1, downsample=None):
@@ -30,6 +51,14 @@ class BottleNeck(nn.Module):
         self.dropout = nn.Dropout(.2)
 
     def forward(self, x):
+        """Forward pass of the ResNet bottleneck block.
+
+        Args:
+            x (torch.Tensor): The input to the block.
+
+        Returns:
+            torch.Tensor: The output of the block.
+        """
         residual = x
 
         out = self.conv1(x)

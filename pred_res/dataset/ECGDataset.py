@@ -3,7 +3,8 @@ File: ECGDataset.py
 Project: potluck
 Author: malli
 Created: 06-10-2024
-Description: write_a_description
+Description: This module contains the ECGDataset class which is a wrapper around the ECGData class.
+             It provides methods to prepare the data for training, validation and testing.
 """
 
 from .ECGData import ECGData
@@ -35,14 +36,34 @@ data_transforms = {
 
 
 class ECGDataset(object):
+    """
+    This class is a wrapper around the ECGData class which provides methods to prepare the data for training, validation and testing.
+    """
     num_classes = 24
     input_channel = 12
 
     def __init__(self, args):
+        """
+        Initialize the ECGDataset class.
+
+        Args:
+            args: The arguments which contain the data directory and the split.
+        """
         self.split = args.split if args.split else '0'
         self.data_dir = args.data_dir if args.data_dir else './data'
 
     def data_preprare(self, test=False):
+        """
+        Prepare the data for training, validation and testing.
+
+        Args:
+            test: If True, prepare the data for testing.
+
+        Returns:
+            train_dataset: The ECGData object for training.
+            val_dataset: The ECGData object for validation.
+            test_dataset: The ECGData object for testing.
+        """
         train_path = './data_split/train_split' + self.split + '.csv'
         val_path = './data_split/val_split' + self.split + '.csv'
         test_path = './data_split/test_split' + self.split + '.csv'
