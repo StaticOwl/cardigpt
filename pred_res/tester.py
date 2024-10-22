@@ -143,7 +143,7 @@ def load_model(model_input, model_base, test_model=None):
         resumes = [model_list[int(np.argmax(accuracy))]]
     else:
         if test_model in model_list:
-            resumes = [test_model]
+            resumes = [os.path.join(model_input, test_model)]
         else:
             logger.error(f"Model {test_model} not found in the model list.")
             resumes = []
