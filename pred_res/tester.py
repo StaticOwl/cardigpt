@@ -8,6 +8,7 @@ Description: write_a_description
 import logging
 import math
 import os
+import time
 import warnings
 
 import numpy as np
@@ -157,19 +158,19 @@ def load_model(model_input, model_base):
     return model_all
 
 
-def save_predictions(output_directory, filename, scores, labels, classes):
-    recording = os.path.splitext(filename)[0]
-    new_file = filename.replace('.mat', '.csv')
-    output_file = os.path.join(output_directory, new_file)
-
-    # Include the filename as the recording number
-    recording_string = '#{}'.format(recording)
-    class_string = ','.join(classes)
-    label_string = ','.join(str(i) for i in labels)
-    score_string = ','.join(str(i) for i in scores)
-
-    with open(output_file, 'w') as f:
-        f.write(recording_string + '\n' + class_string + '\n' + label_string + '\n' + score_string + '\n')
+# def save_predictions(output_directory, filename, scores, labels, classes):
+#     recording = os.path.splitext(filename)[0]
+#     new_file = filename.replace('.mat', '.csv')
+#     output_file = os.path.join(output_directory, new_file)
+#
+#     # Include the filename as the recording number
+#     recording_string = '#{}'.format(recording)
+#     class_string = ','.join(classes)
+#     label_string = ','.join(str(i) for i in labels)
+#     score_string = ','.join(str(i) for i in scores)
+#
+#     with open(output_file, 'w') as f:
+#         f.write(recording_string + '\n' + class_string + '\n' + label_string + '\n' + score_string + '\n')
 
 
 def load_test_data(filename):
@@ -202,11 +203,15 @@ def test(run_args):
     model_all = load_model(model_input, run_args.model_name)
     num_files = len(input_files)
 
+    df_pred = pd.DataFrame(columns=['filename', 'class', 'label', 'score'])
     for i, f in enumerate(input_files):
         logger.info("Predicting {} of {}".format(i + 1, num_files))
         tmp_input_file = os.path.join(test_dir, f)
         data, header_data = load_test_data(tmp_input_file)
         label, score, classes = run_classifier(data, header_data, model_all)
-        save_predictions(output_dir, f, score, label, classes)
+        df_tmp = pd.DataFrame({'filename': [f], **{c: [label[j], score[j]] for j, c in enumerate(classes)}}, index=[0, 1])
+        df_pred = df_pred.append(df_tmp, ignore_index=True)
+
+    df_pred.to_csv(os.path.join(output_dir, f'predictions-{time.time()}.csv'), index=False)
 
     logger.info("Predictions saved!")
