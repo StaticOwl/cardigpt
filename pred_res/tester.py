@@ -142,7 +142,7 @@ def load_model(model_input, model_base, test_model=None):
         logger.info("Model Accuracy: {}".format(accuracy))
         resumes = [model_list[int(np.argmax(accuracy))]]
     else:
-        if test_model in model_list:
+        if os.path.join(model_input, test_model) in model_list:
             resumes = [os.path.join(model_input, test_model)]
         else:
             logger.error(f"Model {test_model} not found in the model list.")
