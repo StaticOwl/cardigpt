@@ -3,7 +3,7 @@ File: basicblock.py
 Project: potluck
 Author: malli
 Created: 04-10-2024
-Description: Basic building block for ResNet models.
+Description: Basic building block for ResNet models with improved descriptions and docstrings.
 """
 import torch
 from torch import nn
@@ -13,9 +13,25 @@ from .util import conv7x1
 
 
 class BasicBlock(nn.Module):
+    """
+    Basic building block for ResNet models.
+
+    Attributes:
+        expansion (int): The expansion factor for the block.
+    """
+
     expansion = 1
 
     def __init__(self, in_planes, out_planes, stride=1, downsample=None):
+        """
+        Initialize a BasicBlock.
+
+        Args:
+            in_planes (int): Number of input channels.
+            out_planes (int): Number of output channels.
+            stride (int, optional): Stride of the first convolutional layer. Defaults to 1.
+            downsample (nn.Module, optional): Downsample layer to match the shape of the residual. Defaults to None.
+        """
         super(BasicBlock, self).__init__()
         self.conv1 = conv7x1(in_planes, out_planes, stride=stride)
         self.bn = nn.BatchNorm1d(out_planes)
@@ -32,6 +48,15 @@ class BasicBlock(nn.Module):
         )
 
     def forward(self, x):
+        """
+        Forward pass through the BasicBlock.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor.
+        """
         residual = x
 
         out1 = self.conv1(x)

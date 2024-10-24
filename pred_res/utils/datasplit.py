@@ -3,8 +3,10 @@ File: datasplit.py
 Project: potluck
 Author: malli
 Created: 06-10-2024
-Description: write_a_description
+Description: This module contains functions to read and split the ECG dataset into
+             training and validation sets.
 """
+
 import logging
 import os
 import shutil
@@ -15,8 +17,16 @@ from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
 from tqdm import tqdm
 
 
-# Calling function
 def read_and_split_data(data_directory):
+    """
+    Read the ECG dataset and split it into training and validation sets.
+
+    Args:
+        data_directory (str): The directory containing the ECG dataset.
+
+    Returns:
+        None
+    """
     save_dir = './data_split'
 
     if not os.path.exists(save_dir):
@@ -84,6 +94,16 @@ def read_and_split_data(data_directory):
 
 
 def ls_dir(rootdir="", suffix=".png"):
+    """
+    List all files in a directory with a given suffix.
+
+    Args:
+        rootdir (str): The root directory to search in.
+        suffix (str): The suffix of the files to search for.
+
+    Returns:
+        list: A list of file paths.
+    """
     file_list = []
     assert os.path.exists(rootdir)
     for r, y, names in os.walk(rootdir):
@@ -94,6 +114,17 @@ def ls_dir(rootdir="", suffix=".png"):
 
 
 def data_split(df, labels, n_split):
+    """
+    Split a dataframe into training and validation sets using stratified k-fold.
+
+    Args:
+        df (pd.DataFrame): The dataframe to split.
+        labels (numpy.ndarray): The labels of the dataframe.
+        n_split (int): The number of splits.
+
+    Returns:
+        list: A list of tuples containing the training and validation sets.
+    """
     X = np.arange(labels.shape[0])
     mskf = MultilabelStratifiedKFold(n_splits=n_split, random_state=2020, shuffle=True)
 
@@ -110,12 +141,32 @@ def data_split(df, labels, n_split):
 
 
 def modifying_filename(data, data_directory):
-    # Get every file
+    """
+    Modify the filename column in a dataframe by adding the data directory.
+
+    Args:
+        data (pd.DataFrame): The dataframe containing the filename column.
+        data_directory (str): The data directory.
+
+    Returns:
+        pd.DataFrame: The modified dataframe.
+    """
     data['filename'] = data['filename'].apply(lambda x: os.path.join(data_directory, os.path.basename(x)))
     return data
 
 
 def get_class_pair(ct_codes_all, files, class_df):
+    """
+    Get the class pairs for a given set of files.
+
+    Args:
+        ct_codes_all (list): The list of all class codes.
+        files (list): The list of files.
+        class_df (pd.DataFrame): The dataframe containing the class pairs.
+
+    Returns:
+        pd.DataFrame: The modified dataframe.
+    """
     i = -1
     for file in files:
         g = file.replace('.mat', '.hea')

@@ -3,13 +3,25 @@ File: proto_loss.py
 Project: potluck
 Author: malli
 Created: 12-10-2024
-Description: write_a_description
+Description: This module defines the prototype loss function used to ensure
+             that prototype vectors are sufficiently distinct from each other.
 """
+
 import torch
 import torch.nn.functional as F
 
-
 def proto_loss(prototype, eps=1e-6):
+    """
+    Calculate the prototype loss, encouraging prototype vectors to be
+    well-separated in the feature space.
+
+    Args:
+        prototype (torch.Tensor): A tensor of prototype vectors.
+        eps (float): A small epsilon value to prevent division by zero.
+
+    Returns:
+        torch.Tensor: The calculated prototype loss.
+    """
     pairwise_distance = F.pdist(prototype, p=2)
     if pairwise_distance.size(0) < 2:
         return torch.tensor(0.0, requires_grad=True).to(prototype.device)

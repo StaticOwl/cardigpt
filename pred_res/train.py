@@ -3,8 +3,10 @@ File: train.py
 Project: potluck
 Author: malli
 Created: 06-10-2024
-Description: write_a_description
+Description: This module contains the Trainer class which is responsible for training the model.
+             It provides methods to set up the training process, train the model and evaluate its performance.
 """
+
 import logging
 import math
 import os
@@ -24,17 +26,18 @@ from utils.proto_loss import proto_loss
 
 
 class Trainer:
-    def __init__(self, args):
-        """
-        Initialize the Trainer class
+    """
+    Initialize the Trainer class
 
-        Args:
-            args: The arguments for the training process
-            model: The model to be trained
-            optimizer: The optimizer for the training process
-            criterion: The loss function for the training process
-            device: The device to be used for training
-        """
+    Args:
+        args: The arguments for the training process
+        model: The model to be trained
+        optimizer: The optimizer for the training process
+        criterion: The loss function for the training process
+        device: The device to be used for training
+    """
+
+    def __init__(self, args):
         self.early_stop = args.early_stop
         self.patience = args.patience
         self.epochs_since_improvement = 0

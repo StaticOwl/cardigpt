@@ -8,8 +8,7 @@ from .seresnet1d import ResNet
 from .util import resnet_model_urls
 
 logger = logging.getLogger(__name__)
-__all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
-           'resnet152']
+__all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34']
 
 prev_model = torch.load('./model_repo/14-0.5524.pth', weights_only=True)
 
@@ -50,38 +49,3 @@ def resnet34(pretrained=False, **kwargs):
         model.load_state_dict(prev_model, strict=False)
     return model
 
-
-def resnet50(pretrained=False, **kwargs):
-    """Constructs a ResNet-50 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    model = ResNet(BottleNeck, [3, 4, 6, 3], **kwargs)
-    if pretrained:
-        model.load_state_dict(prev_model, strict=False)
-    return model
-
-
-def resnet101(pretrained=False, **kwargs):
-    """Constructs a ResNet-101 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    model = ResNet(BottleNeck, [3, 4, 23, 3], **kwargs)
-    if pretrained:
-        model.load_state_dict(prev_model, strict=False)
-    return model
-
-
-def resnet152(pretrained=False, **kwargs):
-    """Constructs a ResNet-152 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    model = ResNet(BottleNeck, [3, 8, 36, 3], **kwargs)
-    if pretrained:
-        model.load_state_dict(prev_model, strict=False)
-    return model

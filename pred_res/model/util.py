@@ -3,7 +3,7 @@ File: util.py
 Project: potluck
 Author: malli
 Created: 04-10-2024
-Description: write_a_description
+Description: Utility functions for creating convolutional layers
 """
 
 import torch.nn as nn
@@ -19,7 +19,7 @@ resnet_model_urls = {
 
 def conv1x1(in_planes, out_planes, strides=1, padding=0, bias=False):
     """
-    1x1 convolution with padding to maintain the length
+    1x1 convolution with padding to maintain the length.
 
     Args:
         in_planes (int): number of input channels
@@ -36,7 +36,7 @@ def conv1x1(in_planes, out_planes, strides=1, padding=0, bias=False):
 
 def conv3x1relu(in_planes, out_planes, strides=1, padding=1, bias=False):
     """
-    3x1 convolution with padding to maintain the length and LeakyReLU activation
+    3x1 convolution with padding to maintain the length and LeakyReLU activation.
 
     Args:
         in_planes (int): number of input channels
@@ -56,7 +56,7 @@ def conv3x1relu(in_planes, out_planes, strides=1, padding=1, bias=False):
 
 def conv7x1(in_planes, out_planes, stride=1):
     """
-    7x1 convolution with padding to maintain the length
+    7x1 convolution with padding to maintain the length.
 
     Args:
         in_planes (int): number of input channels
@@ -72,7 +72,7 @@ def conv7x1(in_planes, out_planes, stride=1):
 
 def conv24x1relu(in_planes, out_planes, strides=2, padding=11, bias=False):
     """
-    24x1 convolution maintains the length / 2 with LeakyReLU activation
+    24x1 convolution with padding to maintain the length / 2 with LeakyReLU activation.
 
     Args:
         in_planes (int): number of input channels
@@ -92,7 +92,7 @@ def conv24x1relu(in_planes, out_planes, strides=2, padding=11, bias=False):
 
 def conv48x1relu(in_planes, out_planes, strides=2, padding=23, bias=False):
     """
-    48x1 convolution with padding to maintain the length / 2 with LeakyReLU activation
+    48x1 convolution with padding to maintain the length / 2 with LeakyReLU activation.
 
     Args:
         in_planes (int): number of input channels
