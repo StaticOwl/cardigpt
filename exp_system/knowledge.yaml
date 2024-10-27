@@ -1,0 +1,197 @@
+conditions:
+  - name: "Rhythm from artificial pacing"
+    description: "An EKG rhythm resulting from an artificial pacemaker."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Monitor pacemaker settings"
+      - "Assess patient symptoms"
+    snomed_code: "10370003"
+
+  - name: "Prolonged QT interval"
+    description: "An EKG finding indicating a longer than normal QT interval."
+    confidence_threshold: 0.8
+    recommendations:
+      - "Evaluate electrolyte levels"
+      - "Review medications for QT prolongation"
+    snomed_code: "111975006"
+  
+  - name: "ECG: Atrial Fibrillation"
+    description: "A common arrhythmia characterized by rapid and irregular beating of the atria."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Consider anticoagulants"
+      - "Rate control medications"
+      - "Consult cardiology"
+    snomed_code: "164889003"
+
+  - name: "EKG: Atrial Flutter"
+    description: "A type of supraventricular tachycardia, marked by recurrent regular atrial contractions."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Consider anticoagulants"
+      - "Rate control medications"
+      - "Consult cardiology"
+    snomed_code: "164890007"
+
+  - name: "EKG: Left Bundle Branch Block"
+    description: "A delay in the conduction of electrical impulses to the left side of the heart."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for underlying cardiac conditions"
+      - "Consult cardiology"
+    snomed_code: "164909002"
+
+  - name: "EKG: Q Wave Abnormal"
+    description: "Presence of abnormal Q waves indicating possible myocardial infarction."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Consider cardiac evaluation"
+      - "Monitor for signs of ischemia"
+    snomed_code: "164917005"
+  
+  - name: "EKG: T Wave Abnormal"
+    description: "Abnormalities in the T wave shape or amplitude on an EKG."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Administer aspirin"
+      - "Consult cardiology for further evaluation"
+    snomed_code: "164934002"
+
+  - name: "Prolonged PR Interval"
+    description: "An irregular heart rhythm, often indicating a block in electrical conduction."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Monitor heart rate and rhythm"
+      - "Consider further cardiology evaluation"
+    snomed_code: "164947007"
+  
+  - name: "Low QRS Voltages"
+    description: "Indicates low electrical activity in the heart, which may suggest underlying heart disease."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Consider echocardiogram"
+      - "Consult cardiology"
+    snomed_code: "251146004"
+
+  - name: "First Degree Atrioventricular Block"
+    description: "A delay in conduction through the AV node, leading to a prolonged PR interval."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor heart rate"
+      - "Consult cardiology if symptomatic"
+    snomed_code: "270492004"
+
+  - name: "Premature Atrial Contraction"
+    description: "Early heartbeats originating from the atria, often benign but may indicate underlying issues."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Monitor for frequency and symptoms"
+      - "Consider further evaluation if frequent"
+    snomed_code: "284470004"
+
+  - name: "Left Axis Deviation"
+    description: "An EKG finding indicating a shift in the heart's electrical activity, which can be normal or pathological."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for underlying cardiac issues"
+      - "Consult cardiology if symptomatic"
+    snomed_code: "39732003"
+  
+  - name: "ECG: Sinus Bradycardia"
+    description: "A slower than normal heart rate originating from the sinus node."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Monitor heart rate"
+      - "Consider atropine if symptomatic"
+    snomed_code: "426177001"
+
+  - name: "ECG: Bradycardia"
+    description: "A slower than normal heart rate, which may be due to various causes."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Monitor heart rate and rhythm"
+      - "Consider further evaluation"
+    snomed_code: "426627000"
+  
+  - name: "ECG: Sinus Rhythm"
+    description: "A normal heart rhythm originating from the sinus node."
+    confidence_threshold: 0.8
+    recommendations:
+      - "No immediate action required"
+      - "Monitor for any changes"
+    snomed_code: "426783006"
+
+  - name: "ECG: Sinus Tachycardia"
+    description: "A faster than normal heart rate originating from the sinus node."
+    confidence_threshold: 0.7
+    recommendations:
+      - "Assess for underlying causes"
+      - "Monitor heart rate"
+    snomed_code: "427084000"
+
+  - name: "ECG: Premature Ventricular Contractions"
+    description: "Early heartbeats originating from the ventricles, often benign."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Monitor frequency"
+      - "Consider further evaluation if symptomatic"
+    snomed_code: "427172004"
+
+  - name: "ECG: Sinus Arrhythmia"
+    description: "A variation in heart rate that occurs with breathing."
+    confidence_threshold: 0.5
+    recommendations:
+      - "Usually benign; monitor if symptomatic"
+      - "Consider further evaluation if needed"
+    snomed_code: "427393009"
+  
+  - name: "Left Anterior Fascicular Block"
+    description: "A conduction delay in the left anterior fascicle, which may indicate underlying heart disease."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for underlying cardiac conditions"
+      - "Consult cardiology"
+    snomed_code: "445118002"
+
+  - name: "Right Axis Deviation"
+    description: "An EKG finding indicating a rightward shift in the electrical axis of the heart."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for potential heart issues"
+      - "Consult cardiology if symptomatic"
+    snomed_code: "47665007"
+  
+  - name: "Inverted T Wave"
+    description: "Indicates possible ischemia or other cardiac conditions."
+    confidence_threshold: 0.65
+    recommendations:
+      - "Consider further evaluation"
+      - "Monitor for symptoms"
+    snomed_code: "59931005"
+
+  - name: "Non-specific Intraventricular Conduction Delay"
+    description: "Indicates a delay in the conduction system of the heart, not specific to any condition."
+    confidence_threshold: 0.55
+    recommendations:
+      - "Monitor and evaluate for underlying issues"
+      - "Consult cardiology if symptomatic"
+    snomed_code: "698252002"
+
+  - name: "EKG: Incomplete Right Bundle Branch Block"
+    description: "A partial blockage in the right bundle branch affecting the electrical conduction."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for underlying conditions"
+      - "Consult cardiology"
+    snomed_code: "713426002"
+
+  - name: "EKG: Complete Right Bundle Branch Block"
+    description: "A complete blockage in the right bundle branch affecting heart conduction."
+    confidence_threshold: 0.6
+    recommendations:
+      - "Monitor for underlying conditions"
+      - "Consult cardiology"
+    snomed_code: "713427006"
+
+  
+  

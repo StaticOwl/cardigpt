@@ -53,6 +53,7 @@ def parse_args():
     parser.add_argument('--lambda_pd', type=float, default=1.0, help='Weight for Prototype Diversity Loss')
     parser.add_argument('--num_prototypes', type=int, default=10, help='Number of Prototypes')
     parser.add_argument('--prototype', action='store_true', help='enable prototype')
+    parser.add_argument('--pretrained', action='store_true', help='enable pretrained model')
     
     return parser.parse_args()
 

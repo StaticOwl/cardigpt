@@ -7,3 +7,5 @@ pred_res/data_split/
 **/logs/
 **/model_zoo/
 **/nohup.out
+**/trained_model/
+**/hub/
