@@ -18,7 +18,7 @@ class Conditions:
         self.parents = []
 
     def load_parents(self):
-        //TODO: Use snowmed data to load parent conditions.
+        #TODO: Use snowmed data to load parent conditions.
         pass
     def get_explanation(self):
         return f"{self.name}: {self.description}. Treatments include {', '.join(self.treatments)}."
