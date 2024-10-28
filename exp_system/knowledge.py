@@ -21,7 +21,7 @@ class Conditions:
         #TODO: Use snowmed data to load parent conditions.
         pass
     def get_explanation(self):
-        return f"{self.name}: {self.description}. Treatments include {', '.join(self.treatments)}."
+        return f"{self.name}: {self.description}. Treatments include {', '.join(self.recommendations)}."
 
 
 def load_knowledge():
@@ -35,7 +35,7 @@ def load_knowledge():
         confidence_threshold = cond["confidence_threshold"]
         recommendations = cond["recommendations"]
         snowmed = cond["snowmed"]
-        conditions[snowmed] = Conditions(name, description, treatments, snowmed)
+        conditions[snowmed] = Conditions(name, description, confidence_threshold, recommendations, snowmed)
     
     return conditions
 
