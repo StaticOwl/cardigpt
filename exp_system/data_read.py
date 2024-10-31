@@ -5,7 +5,7 @@ Date: 26/10/2024
 
 Description: [Add a brief description of the file here]
 """
-import defaultdict
+from collections import defaultdict
 
 def parse_conditions(record):
     confident_conditions = defaultdict(list)
@@ -81,7 +81,7 @@ def enhanced_expert_system_solution(confident_conditions):
     }
 
 # Test the enhanced expert system function on the sample conditions
-enhanced_solution_sample = enhanced_expert_system_solution(confident_conditions_sample)
+enhanced_solution_sample = enhanced_expert_system_solution(None)
 
 enhanced_solution_sample
 
