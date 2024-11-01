@@ -6,88 +6,89 @@ Date: 26/10/2024
 Description: [Add a brief description of the file here]
 """
 from collections import defaultdict
+import pandas as pd
+from math import log, tanh
+import json
 
-def parse_conditions(record):
-    confident_conditions = defaultdict(list)
-
-    for column in record.index:
-        if '_label' in column and record[column] == 1:
-            score_column = column.replace('_label', '_score')
-            condition_code = column.split('_')[0]
-            score = record[score_column] if score_column in record else 0.0
-            confident_conditions[condition_code] = score
-
-    return confident_conditions
-
-def expert_system_solution(confident_conditions):
-    explanation = []
-    solution_confidence = 0.0
+class DataFactory:
+    def __init__(self):
+        self.path = None
+        self.record_dict = None
+        self.knowledge = None
     
-    # Example Rule 1: If certain conditions are present, suggest a potential cardiovascular issue
-    if '111975006' in confident_conditions and '164890007' in confident_conditions:
-        explanation.append("Indication of potential ischemic heart disease.")
-        solution_confidence += (confident_conditions['111975006'] + confident_conditions['164890007']) / 2
+    def read_predictions(self, path):
+        """
+        Reads the predictions from a file and returns a list of predictions.
 
-    # Example Rule 2: If certain arrhythmia-related codes are detected, suggest monitoring for arrhythmia
-    if '426627000' in confident_conditions and '427172004' in confident_conditions:
-        explanation.append("Signs of arrhythmia. Recommend further cardiac monitoring.")
-        solution_confidence += (confident_conditions['426627000'] + confident_conditions['427172004']) / 2
+        Args:
+            path (str): The path to the predictions file.
 
-    # Example Rule 3: If more than 3 high-confidence conditions, suggest a thorough cardiovascular examination
-    if len(confident_conditions) > 3:
-        explanation.append("Multiple conditions detected. Suggest a comprehensive cardiovascular examination.")
-        solution_confidence += sum(confident_conditions.values()) / len(confident_conditions)
+        Returns:
+            list: A list of predictions.
+        """
+        records = pd.read_csv(path, header=0)
+        record_dict = defaultdict(lambda:defaultdict(dict))
 
-    # Normalize the solution confidence score
-    solution_confidence = min(solution_confidence, 1.0)
-    
-    return {
-        "explanation": " | ".join(explanation) if explanation else "No significant condition detected.",
-        "solution_confidence": solution_confidence
-    }
+        for _, row in records.iterrows():
+            filename = row['filename']
+            for key, value in row.items():
+                if key != 'filename':
+                    record_key = key.split('_')
+                    record_dict[filename][record_key[0]][record_key[1]] = value
 
-# Define an enhanced expert system function with more refined rules and thresholds
-def enhanced_expert_system_solution(confident_conditions):
-    explanation = []
-    solution_confidence = 0.0
-    
-    # Rule 1: Threshold-based rule for ischemic heart disease indication
-    if '111975006' in confident_conditions and confident_conditions['111975006'] > 0.8:
-        explanation.append("High confidence for ischemic heart disease.")
-        solution_confidence += confident_conditions['111975006']
+        self.record_dict = dict(record_dict)
 
-    # Rule 2: Combination of arrhythmia and conduction disorder with threshold
-    if '426627000' in confident_conditions and '427172004' in confident_conditions:
-        if confident_conditions['426627000'] > 0.6 and confident_conditions['427172004'] > 0.6:
-            explanation.append("Detected arrhythmia with conduction disorder, indicating possible rhythm instability.")
-            solution_confidence += (confident_conditions['426627000'] + confident_conditions['427172004']) / 2
+    def load_kb(self, path):
+        """
+        Loads the knowledge base from a file and returns a dictionary.
 
-    # Rule 3: Cardiovascular examination recommendation for multiple high-confidence conditions
-    high_confidence_conditions = [code for code, score in confident_conditions.items() if score > 0.7]
-    if len(high_confidence_conditions) > 3:
-        explanation.append("Multiple high-confidence cardiovascular indicators detected. Suggest a comprehensive cardiovascular examination.")
-        solution_confidence += sum(confident_conditions[code] for code in high_confidence_conditions) / len(high_confidence_conditions)
-    
-    # Rule 4: Additional explanatory suggestions for tiered conditions based on severity
-    if len(explanation) > 2:
-        explanation.append("Given the combination of detected conditions, a specialist consultation may be beneficial.")
-    
-    # Normalize the solution confidence score to a maximum of 1.0
-    solution_confidence = min(solution_confidence / len(explanation) if explanation else 0, 1.0)
-    
-    return {
-        "explanation": " | ".join(explanation) if explanation else "No significant condition detected.",
-        "solution_confidence": solution_confidence
-    }
+        Args:
+            path (str): The path to the knowledge base file.
 
-# Test the enhanced expert system function on the sample conditions
-enhanced_solution_sample = enhanced_expert_system_solution(None)
+        Returns:
+            dict: A dictionary of knowledge base data.
+        """
+        with open(path, 'r') as f:
+            self.knowledge = json.load(f)
 
-enhanced_solution_sample
+    def __str__(self): return json.dumps(self.record_dict, indent=4)
+
+    def strength_builder(self):
+        
+        for itemKey, item in self.record_dict.items():
+            for key, value in item.items():
+                try:
+                    confidence = self.knowledge[key]["confidence_threshold"]
+                    label = value.get('label')
+                    score = value.get('score')
+                    score = max(min(score, 1 - 1e-15), 1e-15)
+                    log_odds = log(score / (1 - score))
+                    self.record_dict[itemKey][key]["strength"] = confidence * (tanh(log_odds) if label == 1 else tanh(-log_odds))
+                except KeyError:
+                    print(f"{key}: {value}")
+
+    def mismatched_records(self):
+        
+        mismatched_records = {
+            filename: {key: value for key, value in content.items() 
+               if (value.get('label') == 1 and value.get('score') == 0) or
+                  (value.get('label') == 0 and value.get('score') == 1)}
+            for filename, content in self.record_dict.items()
+        }
+
+        return {k: v for k, v in mismatched_records.items() if v}
 
 
 def main():
+    import os
+    df = DataFactory()
+    path = os.path.join(os.getcwd(), "exp_system") + "/"
+    df.read_predictions(path+"predictions.csv")
+    df.load_kb(path+"knowledge.json")
+    df.strength_builder()
+    print(df.mismatched_records())
+    # print(df)
     pass
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
