@@ -9,6 +9,7 @@ pred_res/data_split/
 **/nohup.out
 **/trained_model/
 **/hub/
-pocs/umls-2024AA-metathesaurus-full.zip
-pocs/pym.sqlite3
-pocs/pym.sqlite3-journal
+**/umls-2024AA-metathesaurus-full.zip
+**/pym.sqlite3
+**/pym.sqlite3-journal
+**/results_*.json

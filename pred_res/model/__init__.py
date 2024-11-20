@@ -10,7 +10,8 @@ from .util import resnet_model_urls
 logger = logging.getLogger(__name__)
 __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34']
 
-prev_model = torch.load('./model_repo/14-0.5524.pth', weights_only=True)
+# prev_model = torch.load('./model_repo/23-14-0.5524.pth', weights_only=True)
+prev_model = torch.load('./model_repo/54-81-0.5748.pth', weights_only=True)
 
 
 def resnet(pretrained=False, **kwargs):
