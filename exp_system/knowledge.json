@@ -2,219 +2,265 @@
     "10370003": {
         "name": "Rhythm from artificial pacing",
         "description": "An EKG rhythm resulting from an artificial pacemaker.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Monitor pacemaker settings",
-            "Assess patient symptoms"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Ensure pacemaker settings are optimized immediately.",
+            "high": "Investigate device functionality and settings.",
+            "medium": "Assess patient symptoms and activity tolerance.",
+            "low": "Schedule periodic device checks and patient education."
+        }
     },
     "111975006": {
         "name": "Prolonged QT interval",
         "description": "An EKG finding indicating a longer than normal QT interval.",
-        "confidence_threshold": 0.8,
-        "recommendations": [
-            "Evaluate electrolyte levels",
-            "Review medications for QT prolongation"
-        ]
+        "impact": "high",
+        "recommendations": {
+            "severe": "Correct electrolyte imbalances urgently and monitor for arrhythmias.",
+            "high": "Discontinue medications that prolong QT interval.",
+            "medium": "Monitor QT interval regularly with EKG.",
+            "low": "Provide patient education on symptoms of arrhythmias."
+        }
     },
     "164889003": {
         "name": "ECG: Atrial Fibrillation",
         "description": "A common arrhythmia characterized by rapid and irregular beating of the atria.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Consider anticoagulants",
-            "Rate control medications",
-            "Consult cardiology"
-        ]
+        "impact": "high",
+        "recommendations": {
+            "severe": "Initiate anticoagulation and consider urgent cardioversion.",
+            "high": "Start rate control medications like beta-blockers.",
+            "medium": "Consult cardiology for further management.",
+            "low": "Educate on stroke risk and lifestyle adjustments."
+        }
     },
     "164890007": {
         "name": "EKG: Atrial Flutter",
         "description": "A type of supraventricular tachycardia, marked by recurrent regular atrial contractions.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Consider anticoagulants",
-            "Rate control medications",
-            "Consult cardiology"
-        ]
+        "impact": "high",
+        "recommendations": {
+            "severe": "Initiate anticoagulation and consider cardioversion.",
+            "high": "Refer to electrophysiology for rhythm control.",
+            "medium": "Monitor for recurrence or progression.",
+            "low": "Advise lifestyle changes to reduce arrhythmia triggers."
+        }
     },
     "164909002": {
         "name": "EKG: Left Bundle Branch Block",
         "description": "A delay in the conduction of electrical impulses to the left side of the heart.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for underlying cardiac conditions",
-            "Consult cardiology"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Consider for Artificial Pacemaker and Evaluate for underlying ischemic or structural heart disease.",
+            "high": "Order echocardiography and assess ejection fraction.",
+            "medium": "Monitor for progression or associated symptoms.",
+            "low": "Reassure asymptomatic patients with normal function."
+        }
     },
     "164917005": {
         "name": "EKG: Q Wave Abnormal",
         "description": "Presence of abnormal Q waves indicating possible myocardial infarction.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Consider cardiac evaluation",
-            "Monitor for signs of ischemia"
-        ]
+        "impact": "high",
+        "recommendations": {
+            "severe": "Perform urgent coronary angiography if acute MI is suspected.",
+            "high": "Start aspirin and beta-blocker therapy.",
+            "medium": "Order serial cardiac enzyme testing.",
+            "low": "Monitor asymptomatic patients with periodic EKG."
+        }
     },
     "164934002": {
         "name": "EKG: T Wave Abnormal",
         "description": "Abnormalities in the T wave shape or amplitude on an EKG.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Administer aspirin",
-            "Consult cardiology for further evaluation"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Evaluate for Trop Thrombotic Thrombocytopenia Syndrome (TTTS).",
+            "high": "Administer antiplatelet therapy if ischemia is suspected.",
+            "medium": "Check for and correct electrolyte imbalances.",
+            "low": "Monitor for progression and educate the patient."
+        }
     },
     "164947007": {
         "name": "Prolonged PR Interval",
         "description": "An irregular heart rhythm, often indicating a block in electrical conduction.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Monitor heart rate and rhythm",
-            "Consider further cardiology evaluation"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Evaluate for progression to higher degrees of block.",
+            "high": "Refer symptomatic patients to electrophysiology.",
+            "medium": "Perform Holter monitoring for heart rhythm assessment.",
+            "low": "Reassure asymptomatic patients and educate them."
+        }
     },
     "251146004": {
         "name": "Low QRS Voltages",
         "description": "Indicates low electrical activity in the heart, which may suggest underlying heart disease.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Consider echocardiogram",
-            "Consult cardiology"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Rule out cardiac tamponade with urgent echocardiography.",
+            "high": "Evaluate for pericardial effusion or myocardial disease.",
+            "medium": "Assess thyroid function and other secondary causes.",
+            "low": "Monitor asymptomatic patients periodically."
+        }
     },
     "270492004": {
         "name": "First Degree Atrioventricular Block",
         "description": "A delay in conduction through the AV node, leading to a prolonged PR interval.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor heart rate",
-            "Consult cardiology if symptomatic"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Refer symptomatic patients to cardiology.",
+            "high": "Perform exercise testing for conduction abnormalities.",
+            "medium": "Monitor heart rate and rhythm periodically.",
+            "low": "Reassure patients with isolated findings."
+        }
     },
     "284470004": {
         "name": "Premature Atrial Contraction",
         "description": "Early heartbeats originating from the atria, often benign but may indicate underlying issues.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Monitor for frequency and symptoms",
-            "Consider further evaluation if frequent"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Evaluate frequent PACs for underlying structural heart disease.",
+            "high": "Monitor for progression to atrial fibrillation.",
+            "medium": "Assess patient symptoms and triggers like caffeine.",
+            "low": "Provide lifestyle advice to reduce recurrence."
+        }
     },
     "39732003": {
         "name": "Left Axis Deviation",
         "description": "An EKG finding indicating a shift in the heart's electrical activity, which can be normal or pathological.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for underlying cardiac issues",
-            "Consult cardiology if symptomatic"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Assess for left ventricular hypertrophy or myocardial disease.",
+            "high": "Evaluate non-cardiac causes like thyroid dysfunction. Perform echocardiography for structural evaluation.",
+            "medium": "Monitor Electrolyte levels.",
+            "low": "Reassure asymptomatic patients."
+        }
     },
     "426177001": {
         "name": "ECG: Sinus Bradycardia",
-        "description": "A slower than normal heart rate originating from the sinus node.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Monitor heart rate",
-            "Consider atropine if symptomatic"
-        ]
+        "description": "A slower than normal (less than 60 bpm) heart rate originating from the sinus node.",
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Address symptomatic bradycardia with atropine or pacing.",
+            "high": "Assess for underlying causes like hypothyroidism.",
+            "medium": "Monitor with periodic EKGs.",
+            "low": "Reassure asymptomatic patients."
+        }
     },
     "426627000": {
         "name": "ECG: Bradycardia",
         "description": "A slower than normal heart rate, which may be due to various causes.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Monitor heart rate and rhythm",
-            "Consider further evaluation"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Initiate pacing in cases of symptomatic bradycardia.",
+            "high": "Identify and treat reversible causes like medications.",
+            "medium": "Monitor heart rate trends over time.",
+            "low": "Reassure asymptomatic patients and educate them."
+        }
     },
     "426783006": {
         "name": "ECG: Sinus Rhythm",
         "description": "A normal heart rhythm originating from the sinus node.",
-        "confidence_threshold": 0.8,
-        "recommendations": [
-            "No immediate action required",
-            "Monitor for any changes"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Administer atropine or pacing for symptomatic cases.",
+            "high": "Monitor for deviations from normal rhythm.",
+            "medium": "Perform routine EKGs during physical exams.",
+            "low": "Reassure patients of normal findings."
+        }
     },
     "427084000": {
         "name": "ECG: Sinus Tachycardia",
-        "description": "A faster than normal heart rate originating from the sinus node.",
-        "confidence_threshold": 0.7,
-        "recommendations": [
-            "Assess for underlying causes",
-            "Monitor heart rate"
-        ]
+        "description": "A faster than normal (more than 100 bpm) heart rate originating from the sinus node.",
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Address tachycardia causing hemodynamic instability.",
+            "high": "Identify and treat reversible causes like fever or dehydration.",
+            "medium": "Monitor heart rate and patient symptoms.",
+            "low": "Reassure mild cases with no underlying pathology."
+        }
     },
     "427172004": {
         "name": "ECG: Premature Ventricular Contractions",
         "description": "Early heartbeats originating from the ventricles, often benign.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Monitor frequency",
-            "Consider further evaluation if symptomatic"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Evaluate frequent PVCs for structural abnormalities.",
+            "high": "Assess for progression to ventricular arrhythmias.",
+            "medium": "Perform Holter monitoring for symptomatic cases.",
+            "low": "Reassure patients with occasional PVCs."
+        }
     },
     "427393009": {
         "name": "ECG: Sinus Arrhythmia",
         "description": "A variation in heart rate that occurs with breathing.",
-        "confidence_threshold": 0.5,
-        "recommendations": [
-            "Usually benign; monitor if symptomatic",
-            "Consider further evaluation if needed"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Rarely requires intervention; consider underlying causes.",
+            "high": "Assess for autonomic dysfunction in symptomatic cases.",
+            "medium": "Monitor heart rate variability over time.",
+            "low": "Reassure patients that this is often a normal finding."
+        }
     },
     "445118002": {
         "name": "Left Anterior Fascicular Block",
         "description": "A conduction delay in the left anterior fascicle, which may indicate underlying heart disease.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for underlying cardiac conditions",
-            "Consult cardiology"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Evaluate for underlying cardiac conditions with imaging.",
+            "high": "Consult cardiology for further assessment.",
+            "medium": "Monitor for progression or new symptoms.",
+            "low": "Reassure asymptomatic patients."
+        }
     },
     "47665007": {
         "name": "Right Axis Deviation",
         "description": "An EKG finding indicating a rightward shift in the electrical axis of the heart.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for potential heart issues",
-            "Consult cardiology if symptomatic"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Evaluate for pulmonary hypertension or right heart strain.",
+            "high": "Perform echocardiography if symptomatic.",
+            "medium": "Monitor for changes in axis deviation.",
+            "low": "Reassure patients with incidental findings."
+        }
     },
     "59931005": {
         "name": "Inverted T Wave",
         "description": "Indicates possible ischemia or other cardiac conditions.",
-        "confidence_threshold": 0.65,
-        "recommendations": [
-            "Consider further evaluation",
-            "Monitor for symptoms"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Evaluate for acute coronary syndrome with enzymes and angiography.",
+            "high": "Administer antiplatelet therapy as indicated.",
+            "medium": "Order imaging to assess ischemia.",
+            "low": "Monitor for resolution or progression."
+        }
     },
     "698252002": {
         "name": "Non-specific Intraventricular Conduction Delay",
         "description": "Indicates a delay in the conduction system of the heart, not specific to any condition.",
-        "confidence_threshold": 0.55,
-        "recommendations": [
-            "Monitor and evaluate for underlying issues",
-            "Consult cardiology if symptomatic"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Consider advanced imaging for structural abnormalities.",
+            "high": "Consult cardiology if symptoms develop.",
+            "medium": "Monitor with periodic EKGs.",
+            "low": "Reassure patients with no symptoms."
+        }
     },
     "713426002": {
         "name": "EKG: Incomplete Right Bundle Branch Block",
         "description": "A partial blockage in the right bundle branch affecting the electrical conduction.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for underlying conditions",
-            "Consult cardiology"
-        ]
+        "impact": "low",
+        "recommendations": {
+            "severe": "Rarely requires treatment unless symptomatic.",
+            "high": "Monitor for progression to complete block.",
+            "medium": "Perform echocardiography to rule out structural issues.",
+            "low": "Reassure patients with incidental findings."
+        }
     },
     "713427006": {
         "name": "EKG: Complete Right Bundle Branch Block",
         "description": "A complete blockage in the right bundle branch affecting heart conduction.",
-        "confidence_threshold": 0.6,
-        "recommendations": [
-            "Monitor for underlying conditions",
-            "Consult cardiology"
-        ]
+        "impact": "medium",
+        "recommendations": {
+            "severe": "Recommend Artificial Pacing and Evaluate for ischemic heart disease or cardiomyopathy.",
+            "high": "Consult cardiology for persistent or symptomatic cases.",
+            "medium": "Monitor for associated symptoms like syncope.",
+            "low": "Reassure asymptomatic patients."
+        }
     }
 }

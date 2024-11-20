@@ -34,9 +34,9 @@ def predict(run_args):
     label, score, classes = run_classifier(data, header_data, model)
 
     results = defaultdict(list)
-    results['filekey'] = filename
+    results[filename]['filekey'] = filename
     for j, c in enumerate(classes):
-        results[c] = {"label": label[j], "score": score[j]}
+        results[filename][c] = {"label": label[j], "score": score[j]}
 
     # results = {
     #     'filename': filename,
