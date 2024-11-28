@@ -26,6 +26,7 @@ def predict(run_args):
 
     logger.info("Test model path: {}".format(model_input))
     model = load_model(model_input, run_args.model_name, run_args.test_model_name)
+    logger.info(model)
 
     input_file = os.path.join(test_dir, f'{filename}.mat')
     logger.info(input_file)
