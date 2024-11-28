@@ -47,9 +47,9 @@ class DataFactory:
             record_dict = defaultdict(lambda:defaultdict(dict))
 
             for _, row in records.iterrows():
-                filename = row['filekey']
+                filename = row['filename']
                 for key, value in row.items():
-                    if key != 'filekey':
+                    if key != 'filename':
                         record_key = key.split('_')
                         record_dict[filename][record_key[0]][record_key[1]] = value
 
@@ -110,15 +110,19 @@ class DataFactory:
 
 
 def main():
-    # import os
-    # df = DataFactory()
-    # path = os.path.join(os.getcwd(), "exp_system") + "/"
-    # df.read_predictions(path+"results_E03065.json", is_csv=False)
-    # df.load_kb(path+"knowledge.json")
-    # df.strength_builder()
+    import os,json
+    df = DataFactory()
+    path = os.path.join(os.getcwd(), "exp_system") + "/"
+    df.read_predictions(path+"results_E03065.json", is_csv=False)
+    df.load_kb(path+"knowledge.json")
+    df.strength_builder()
     # for key, _ in df.knowledge.items():
     #     df.load_snomed(key)
     # print(df.knowledge)
+    chatbot_input="exp_system/chatbot_input"
+    os.makedirs(chatbot_input,exist_ok=True)
+    with open(f"{chatbot_input}/results_E03065_output.json", "w") as outfile:
+        json.dump(df.record_dict, outfile, indent=4)
     pass
 
 if __name__ == "__main__":
