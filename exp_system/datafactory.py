@@ -47,9 +47,9 @@ class DataFactory:
             record_dict = defaultdict(lambda:defaultdict(dict))
 
             for _, row in records.iterrows():
-                filename = row['filename']
+                filename = row['filekey']
                 for key, value in row.items():
-                    if key != 'filename':
+                    if key != 'filekey':
                         record_key = key.split('_')
                         record_dict[filename][record_key[0]][record_key[1]] = value
 
