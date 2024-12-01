@@ -110,6 +110,8 @@ while True:
  
  
     chat_context.append((question, response))
+    with open("exp_system/chat_context.json","w") as file:
+        json.dump(chat_context,file)
  
  
     if len(chat_context) > 10:
