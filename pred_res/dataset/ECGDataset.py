@@ -8,7 +8,7 @@ Description: This module contains the ECGDataset class which is a wrapper around
 """
 
 from .ECGData import ECGData
-from .Transformers import Compose, RandomClip, Normalize, Retype, ValClip
+from .Transformers import *
 import pandas as pd
 
 nomalisetype = 'none'
@@ -18,6 +18,9 @@ sample_ratio = 0.5
 
 data_transforms = {
     'train': Compose([
+        # AddNoise(noise_factor=0.01),
+        # TimeWarp(stretch_factor=0.1),
+        # MagnitudeScaling(scale_factor=0.1),
         RandomClip(len=seq_length),
         Normalize(nomalisetype),
         Retype()

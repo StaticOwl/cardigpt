@@ -282,7 +282,7 @@ class Trainer:
                 logging.info('current lr: {}'.format(args.lr))
 
         writer.close()
-        self.wandb_logger.finish()
+        self.wandb_logger.close()
 
     def nn_forward(self, inputs, ag, labels):
         with torch.no_grad():

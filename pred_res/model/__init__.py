@@ -12,7 +12,9 @@ __all__ = ['ResNet', 'resnet', 'resnet18', 'resnet34']
 
 # prev_model = torch.load('./model_repo/23-14-0.5524.pth', weights_only=True)
 # prev_model = torch.load('./model_repo/54-81-0.5748.pth', weights_only=True)
-prev_model = torch.load('./model_repo/61-20-0.5913.pth', weights_only=True)
+# prev_model = torch.load('./model_repo/61-20-0.5913.pth', weights_only=True)
+# prev_model = torch.load('./model_repo/63-16-0.6015.pth', weights_only=True)
+prev_model = torch.load('./model_repo/64-8-0.6121.pth', weights_only=True)
 
 
 def resnet(pretrained=False, **kwargs):

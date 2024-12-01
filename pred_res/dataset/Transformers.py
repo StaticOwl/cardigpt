@@ -141,3 +141,35 @@ class ValClip(object):
             zeros_padding = np.zeros(shape=(seq.shape[0], self.len - seq.shape[1]), dtype=np.float32)
             seq = np.hstack((seq, zeros_padding))
         return seq
+    
+class AddNoise(object):
+    def __init__(self, noise_factor=0.01):
+        self.noise_factor = noise_factor
+
+    def __call__(self, seq):
+        noise = np.random.normal(0, self.noise_factor, seq.shape)
+        return seq + noise
+    
+class TimeWarp(object):
+    def __init__(self, stretch_factor=0.2):
+        self.stretch_factor = stretch_factor
+
+    def __call__(self, seq):
+        factor = 1 + random.uniform(-self.stretch_factor, self.stretch_factor)
+        warped_seq = np.zeros((seq.shape[0], int(seq.shape[1] * factor)))
+        for i in range(seq.shape[0]):
+            warped_seq[i] = np.interp(
+                np.linspace(0, len(seq[i]), int(len(seq[i]) * factor)),
+                np.arange(len(seq[i])), 
+                seq[i]
+            )
+
+        return warped_seq
+    
+class MagnitudeScaling(object):
+    def __init__(self, scale_factor=0.1):
+        self.scale_factor = scale_factor
+
+    def __call__(self, seq):
+        factor = 1 + random.uniform(-self.scale_factor, self.scale_factor)
+        return seq * factor
