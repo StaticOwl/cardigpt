@@ -23,6 +23,8 @@ from dataset.ECGDataset import ECGDataset
 from utils.freeze import set_freeze_by_id
 from utils.metrics import cal_acc
 from utils.proto_loss import proto_loss
+from datetime import datetime
+from utils.wanmetric import WandbLogger
 
 
 class Trainer:
@@ -57,6 +59,8 @@ class Trainer:
         self.start_epoch = 0
         self.cal_acc = cal_acc
         self.lambda_pd = args.lambda_pd
+        self.wandb_run = None
+        self.wandb_logger = WandbLogger(project_name='potluck', run_name=f"train_{datetime.now().strftime('%Y%m%d%H%M%S')}")
 
     def setup(self):
         """
@@ -135,11 +139,14 @@ class Trainer:
             logging.info('-' * 5 + 'Epoch {}/{}'.format(epoch, args.max_epoch - 1) + '-' * 5)
 
             if self.lr_scheduler is not None:
-                logging.info('current lr: {}'.format(self.lr_scheduler.get_last_lr()))
-                writer.add_scalar('Learning Rate', self.lr_scheduler.get_last_lr()[0], epoch)
+                current_lr = self.lr_scheduler.get_last_lr()
+                logging.info('current lr: {}'.format(current_lr))
+                writer.add_scalar('Learning Rate', current_lr[0], epoch)
+                self.wandb_logger.log_metric("Learning Rate", current_lr[0], step=epoch)
             else:
                 logging.info('current lr: {}'.format(args.lr))
                 writer.add_scalar('Learning Rate', args.lr, epoch)
+                self.wandb_logger.log_metric("Learning Rate", args.lr, step=epoch)
 
             # Each epoch has a training and val phase
             for phase in ['train', 'val']:
@@ -205,6 +212,7 @@ class Trainer:
                                 batch_loss = 0.0
                                 batch_count = 0
                                 writer.add_scalar('Train Loss', batch_loss_avg, step)
+                                self.wandb_logger.log_metric(f"{phase.capitalize()} Step Loss", batch_loss_avg, step=step)
 
                             step += 1
 
@@ -240,8 +248,9 @@ class Trainer:
                 metric = self.cal_acc(labels_all, logits_prob_all)
                 epoch_loss = epoch_loss / len(self.dataloaders[phase].dataset)
 
+                self.wandb_logger.log_metrics({f"{phase.capitalize()} Loss": epoch_loss, f"{phase.capitalize()} Metric": metric}, step=epoch)
                 writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
-                writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
+
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-metric: {:.4f}, Cost {:.1f} sec'.
                              format(epoch, phase, epoch_loss, phase, metric, time.time() - epoch_start))
 
@@ -253,8 +262,9 @@ class Trainer:
 
                         model_state = self.model.module.state_dict() if self.device_count > 1 else self.model.state_dict()
                         torch.save(model_state,
-                                   os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
+                                   os.path.join(self.save_dir, f'{epoch}-{best_acc:.4f}.pth'))
                         logging.info(f'New best model saved at epoch {epoch} with accuracy {best_acc:.4f}')
+                        self.wandb_logger.run.log({f"Best Model Metadata": {"Epoch": epoch, "Accuracy": best_acc}})
                     else:
                         self.epochs_since_improvement += 1
                         if self.early_stop and self.epochs_since_improvement > self.patience:
@@ -262,6 +272,7 @@ class Trainer:
                                 f'Early stopping triggered after {self.epochs_since_improvement} epochs with no improvement.')
                             writer.add_scalar(f'{phase.capitalize()} Loss', epoch_loss, epoch)
                             writer.close()
+                            self.wandb_logger.finish()
                             return
 
             # Update the learning rate
@@ -271,6 +282,7 @@ class Trainer:
                 logging.info('current lr: {}'.format(args.lr))
 
         writer.close()
+        self.wandb_logger.finish()
 
     def nn_forward(self, inputs, ag, labels):
         with torch.no_grad():

@@ -10,10 +10,9 @@ pred_res/data_split/
 **/trained_model/
 **/hub/
 **/umls-2024AA-metathesaurus-full.zip
-exp_system/umls-2024AA-metathesaurus-full
-exp_system/umls-2024AA-metathesaurus-full.zip
 **/pym.sqlite3
 **/pym.sqlite3-journal
 **/results_*.json
 venv
 .env
+**/wandb
