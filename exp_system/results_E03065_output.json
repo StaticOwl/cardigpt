@@ -1,0 +1,88 @@
+{
+    "E03065": {
+        "filekey": "E03065",
+        "251146004": {
+            "label": 0,
+            "score": 0.051127247512340546,
+            "condition": "medium",
+            "recommendation": "Assess thyroid function and other secondary causes.",
+            "knowledge": {
+                "name": "Low QRS Voltages",
+                "description": "Indicates low electrical activity in the heart, which may suggest underlying heart disease.",
+                "label": "Low QRS voltages",
+                "synonyms": [
+                    "Low QRS voltages (finding)"
+                ],
+                "relevant_ancestors": [
+                    "Decreased electrocardiogram voltage",
+                    "ECG voltage - finding"
+                ],
+                "interpretation": [
+                    "Electrocardiographic procedure"
+                ],
+                "term_type": [
+                    "PT",
+                    "FN"
+                ],
+                "wiki_summary": "Cardiac amyloidosis is a subcategory of amyloidosis where there is depositing of the protein amyloid in the cardiac muscle and surrounding tissues. Amyloid, a misfolded and insoluble protein, can become a deposit in the heart's atria, valves, or ventricles. These deposits can cause thickening of different sections of the heart, leading to decreased cardiac function. The overall decrease in cardiac function leads to a plethora of symptoms. This multisystem disease was often misdiagnosed, with a corrected analysis only during autopsy. Advancements of technologies have increased earlier accuracy of diagnosis. Cardiac amyloidosis has multiple sub-types including light chain, familial, and senile. One of the most studied types is light chain cardiac amyloidosis. Prognosis depends on the extent of the deposits in the body and the type of amyloidosis. New treatment methods are actively being researched in regards to the treatment of heart failure and specific cardiac amyloidosis problems.\n\n"
+            }
+        },
+        "39732003": {
+            "label": 0,
+            "score": 0.035505667328834534,
+            "condition": "medium",
+            "recommendation": "Monitor Electrolyte levels.",
+            "knowledge": {
+                "name": "Left Axis Deviation",
+                "description": "An EKG finding indicating a shift in the heart's electrical activity, which can be normal or pathological.",
+                "label": "Left axis deviation",
+                "synonyms": [
+                    "LAD - Left axis deviation",
+                    "Left axis deviation (finding)"
+                ],
+                "relevant_ancestors": [
+                    "Electrocardiogram abnormal",
+                    "Electrocardiogram finding"
+                ],
+                "interpretation": [
+                    "Electrocardiographic procedure",
+                    "QRS Axis"
+                ],
+                "term_type": [
+                    "PT",
+                    "SY",
+                    "FN"
+                ],
+                "wiki_summary": "In electrocardiography, left axis deviation (LAD) is a condition wherein the mean electrical axis of ventricular contraction of the heart lies in a frontal plane direction between \u221230\u00b0 and \u221290\u00b0. This is reflected by a QRS complex positive in lead I and negative in leads aVF and II.\nThere are several potential causes of LAD. Some of the causes include normal variation, thickened left ventricle, conduction defects, inferior wall myocardial infarction, pre-excitation syndrome, ventricular ectopic rhythms, congenital heart disease, high potassium levels, emphysema, mechanical shift, and paced rhythm.\nSymptoms and treatment of left axis deviation depend on the underlying cause."
+            }
+        },
+        "426783006": {
+            "label": 1,
+            "score": 0.9241074919700623,
+            "condition": "severe",
+            "recommendation": "Administer atropine or pacing for symptomatic cases.",
+            "knowledge": {
+                "name": "ECG: Sinus Rhythm",
+                "description": "A normal heart rhythm originating from the sinus node.",
+                "label": "ECG: sinus rhythm",
+                "synonyms": [
+                    "Electrocardiogram: sinus rhythm",
+                    "Electrocardiogram: sinus rhythm (finding)"
+                ],
+                "relevant_ancestors": [
+                    "Electrocardiogram finding",
+                    "Evaluation finding"
+                ],
+                "interpretation": [
+                    "Electrocardiographic procedure"
+                ],
+                "term_type": [
+                    "PT",
+                    "SY",
+                    "FN"
+                ],
+                "wiki_summary": null
+            }
+        }
+    }
+}
