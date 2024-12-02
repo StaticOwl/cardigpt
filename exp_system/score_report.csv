@@ -1,23 +1,9 @@
 Question,Response,Metric 1-Coverage Score,Metric 2 - Grounding Score,Metric 3 - Coherence Score,Final Score
-which diagnosis are marked medium,"Left Axis Deviation and Prolonged QT interval are marked as medium.  ECG: Sinus Arrhythmia is also marked as medium.
-",0.55668354,0.75332195,0.7,0.63000673
-what is left axis deviation,"Left axis deviation is an EKG finding indicating a shift in the heart's electrical activity, which can be normal or pathological.
-",0.77558714,0.8762655,0.9,0.81823194
-what recommendations do you have for ECG sinus arrhythmia,"Monitor heart rate variability over time.
-",0.43227103,0.7668433,0.6,0.54941565
-explain prolonged qt interval,"Prolonged QT interval is an EKG finding indicating a longer than normal QT interval.
-",0.83224,0.9602254,0.6,0.8474117
-what are the most critical findings,"ECG: Sinus Rhythm is the most critical finding.
-",0.37649232,0.61947566,0.7,0.4817381
-on what basis would you classify sinus ecg rhythm as most critical,"The ECG: Sinus Rhythm finding was labeled as ""severe"" and required immediate intervention with atropine or pacing if symptomatic.  The other conditions were labeled as less severe.
-",0.8,0.6,0.9,0.82
-what are relveant ancestors for sinus rhythm,"Electrocardiogram finding and Evaluation finding.
-",0.8,0.6,0.9,0.82
-are there any synonyms for sinus rhythm,"Electrocardiogram: sinus rhythm and Electrocardiogram: sinus rhythm (finding).
-",0.8,0.6,0.9,0.82
-which findings are least important and can be ignored,"Low QRS Voltages and Inverted T Wave are the least important findings.
-",0.8,0.6,0.9,0.82
-what is the inference of low qrs voltage,"Low QRS voltages indicate low electrical activity in the heart, which may suggest underlying heart disease.
-",0.8,0.6,0.9,0.82
-what are implication of low electrical activity,"Low electrical activity in the heart may suggest underlying heart disease.
-",0.8,0.6,0.9,0.82
+what does low qrs voltage signify,"Low QRS voltages indicate low electrical activity in the heart, which may suggest underlying heart disease.
+",0.8230822,0.6188616,0.9,0.7695079
+do we have relevant ancestors for the disease,"Yes, the relevant ancestors for Low QRS Voltages are Decreased electrocardiogram voltage and ECG voltage - finding.
+",0.21951038,0.61655223,0.6,0.3766719
+what is the interpretation for low electrical activity,"The interpretation for low QRS voltages is an electrocardiographic procedure.
+",0.48722422,0.5995734,0.6,0.5322066
+how would you categorize diagnosis for left axis deviation,"Left axis deviation is categorized as a medium condition.
+",0.7531813,0.5529808,0.6,0.67780304

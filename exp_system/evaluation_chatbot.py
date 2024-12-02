@@ -9,7 +9,7 @@ from tabulate import tabulate
 import json
 import re
 from dotenv import load_dotenv
-json_file_path = 'exp_system/chatbot_input/results_E03065_output.json'
+json_file_path = 'exp_system/results_E03065_output.json'
 with open(json_file_path, 'r') as data_file:
     data = json.load(data_file)
 # Initialize models
