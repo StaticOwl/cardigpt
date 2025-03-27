@@ -195,6 +195,11 @@ class Trainer:
                             loss.backward()
                             self.optimizer.step()
 
+                            # for name, param in self.model.named_parameters():
+                            #     if param.grad is not None:
+                            #         logging.debug(f"Gradient for {name}: {param.grad.norm()}")
+
+
                             batch_loss += loss_temp
                             batch_count += inputs.size(0)
 

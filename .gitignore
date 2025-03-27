@@ -2,12 +2,13 @@ files/
 pred_res/input_data/
 upload/
 pred_res/model/comb.py
+pred_res/cache/
 **/__pycache__/
 pred_res/data_split/
 **/logs/
 **/model_zoo/
 **/nohup.out
-**/trained_model/
+**/trained_model*
 **/hub/
 **/umls-2024AA-metathesaurus-full.zip
 **/pym.sqlite3
