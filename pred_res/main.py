@@ -40,7 +40,7 @@ def parse_args():
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
     parser.add_argument('--num_workers', type=int, default=0, help='number of training process workers')
     parser.add_argument('--layers_num_last', type=int, default=0, help='number of last layers to unfreeze')
-    parser.add_argument('--lr', type=float, default=0.0003, help='initial learning rate')
+    parser.add_argument('--lr', type=float, default=0.00003, help='initial learning rate')
     parser.add_argument('--weight_decay', type=float, default=1e-5, help='weight decay')
     parser.add_argument('--step_size', type=int, default=3, help='stepLR step decay')
     parser.add_argument('--gamma', type=float, default=0.1, help='learning rate scheduler parameter for step and exp')
