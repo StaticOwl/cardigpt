@@ -13,6 +13,8 @@ pred_res/data_split/
 **/pym.sqlite3
 **/pym.sqlite3-journal
 **/results_*.json
+**/cache/*
 venv
 .env
 **/wandb
+**/*.pth
