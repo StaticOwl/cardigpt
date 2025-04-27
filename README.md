@@ -43,9 +43,6 @@ python main.py --model_name resnet_tr --max_epoch 100 --num_workers 10 --type tr
 
 Developed and maintained by  
 [@StaticOwl](https://www.github.com/StaticOwl) (Koustav Mallick)  
-with contributions from  
-Neel Singh and Mohammedreza Hajiarbabi  
-Department of Computer Science, Purdue University Fort Wayne
 
 ---
 
