@@ -39,26 +39,6 @@ python main.py --model_name resnet_tr --max_epoch 100 --num_workers 10 --type tr
 
 ---
 
-python main.py --model_name resnet_tr --type predict --pretrained --test_model_name 54-81-0.5748.pth --test_file A0064
-
-# Predict without pretrained weights
-python main.py --model_name resnet_tr --type predict --test_model_name 54-81-0.5748.pth --test_file A0064
-
-# Train a model from scratch (with optional pretrained base)
-python main.py --model_name resnet_tr --max_epoch 100 --num_workers 10 --type train --pretrained
-```
-
----
-
-# Project Structure
-
-- `/papers/` : Literature reviews and related research documentation.
-- `/models/` : Saved model checkpoints.
-- `/src/` : Core implementation (prediction, training, fuzzification, chatbot integration).
-- `/scripts/` : Helper utilities and evaluation scripts.
-
----
-
 # Credits
 
 Developed and maintained by  
